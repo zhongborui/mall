@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.BaseBrand;
+import com.arui.mall.model.pojo.entity.BaseBrand;
 import com.arui.mall.product.mapper.BaseBrandMapper;
 import com.arui.mall.product.service.BaseBrandService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

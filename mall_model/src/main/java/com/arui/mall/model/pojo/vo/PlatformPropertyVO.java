@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -19,15 +20,11 @@ import java.io.Serializable;
  * @since 2021-10-28
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@ApiModel(value="PlatformPropertyName对象", description="属性表")
-public class PlatformPropertyName implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+@ApiModel(value="PlatformPropertyName对象VO", description="属性表")
+public class PlatformPropertyVO implements Serializable {
 
     @ApiModelProperty(value = "编号")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "属性名称")
@@ -39,5 +36,6 @@ public class PlatformPropertyName implements Serializable {
     @ApiModelProperty(value = "分类层级")
     private Integer categoryLevel;
 
-
+    @ApiModelProperty(value = "平台属性一对多")
+    private List<PlatformPropertyValueVO> platformPropertyValueVOList;
 }

@@ -1,6 +1,6 @@
 package com.arui.mall.product.mapper;
 
-import com.arui.mall.model.entity.SkuInfo;
+import com.arui.mall.model.pojo.entity.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

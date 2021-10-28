@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

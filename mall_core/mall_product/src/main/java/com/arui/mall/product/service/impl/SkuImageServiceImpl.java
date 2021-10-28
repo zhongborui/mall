@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.SkuImage;
+import com.arui.mall.model.pojo.entity.SkuImage;
 import com.arui.mall.product.mapper.SkuImageMapper;
 import com.arui.mall.product.service.SkuImageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

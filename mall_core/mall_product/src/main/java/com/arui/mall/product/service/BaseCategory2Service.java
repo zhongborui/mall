@@ -1,7 +1,9 @@
 package com.arui.mall.product.service;
 
-import com.arui.mall.model.entity.BaseCategory2;
+import com.arui.mall.model.pojo.entity.BaseCategory2;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BaseCategory2Service extends IService<BaseCategory2> {
 
+
+    /**
+     * 查询商品二级分类列表
+     * @param category1ID
+     * @return
+     */
+    List<BaseCategory2> getCategory2(Long category1ID);
 }

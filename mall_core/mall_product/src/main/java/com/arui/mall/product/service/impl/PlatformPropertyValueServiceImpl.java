@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.PlatformPropertyValue;
+import com.arui.mall.model.pojo.entity.PlatformPropertyValue;
 import com.arui.mall.product.mapper.PlatformPropertyValueMapper;
 import com.arui.mall.product.service.PlatformPropertyValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * sku销售属性值
+ * 属性值表
  * </p>
  *
  * @author ...
@@ -21,23 +21,20 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SkuSalePropertyValue对象", description="sku销售属性值")
-public class SkuSalePropertyValue implements Serializable {
+@ApiModel(value="PlatformPropertyValue对象", description="属性值表")
+public class PlatformPropertyValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "编号")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "库存单元id")
-    private Long skuId;
+    @ApiModelProperty(value = "属性值名称")
+    private String propertyValue;
 
-    @ApiModelProperty(value = "spu_id(冗余)")
-    private Long productId;
-
-    @ApiModelProperty(value = "销售属性值id")
-    private Long salePropertyValueId;
+    @ApiModelProperty(value = "属性id")
+    private Long propertyKeyId;
 
 
 }

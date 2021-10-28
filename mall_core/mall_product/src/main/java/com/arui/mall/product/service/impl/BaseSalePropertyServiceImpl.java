@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.BaseSaleProperty;
+import com.arui.mall.model.pojo.entity.BaseSaleProperty;
 import com.arui.mall.product.mapper.BaseSalePropertyMapper;
 import com.arui.mall.product.service.BaseSalePropertyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

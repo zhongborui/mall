@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

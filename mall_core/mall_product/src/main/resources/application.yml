@@ -2,7 +2,7 @@ server:
   port: 8200
 
 mybatis-plus:
-  mapper-locations: classpath:com/arui/mapper/xml/*.xml
+  mapper-locations: classpath:com/arui/mall/product/mapper/xml/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 spring:

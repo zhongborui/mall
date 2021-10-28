@@ -1,7 +1,10 @@
 package com.arui.mall.product.mapper;
 
-import com.arui.mall.model.entity.PlatformPropertyName;
+import com.arui.mall.model.pojo.entity.PlatformPropertyName;
+import com.arui.mall.model.pojo.vo.PlatformPropertyVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PlatformPropertyNameMapper extends BaseMapper<PlatformPropertyName> {
 
+    /**
+     * 根据三级id查询商品平台属性
+     * @param category1Id
+     * @param category2Id
+     * @param category3Id
+     * @return
+     */
+    List<PlatformPropertyVO> getPlatformPropertyByCategoryId(Long category1Id, Long category2Id, Long category3Id);
 }

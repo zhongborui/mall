@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -9,11 +9,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * <p>
- * 商品海报表
+ * 商品图片表
  * </p>
  *
  * @author ...
@@ -22,8 +21,8 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SpuPoster对象", description="商品海报表")
-public class SpuPoster implements Serializable {
+@ApiModel(value="SpuImage对象", description="商品图片表")
+public class SpuImage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,20 +33,11 @@ public class SpuPoster implements Serializable {
     @ApiModelProperty(value = "商品id")
     private Long spuId;
 
-    @ApiModelProperty(value = "文件名称")
-    private String imgName;
+    @ApiModelProperty(value = "图片名称")
+    private String imageName;
 
-    @ApiModelProperty(value = "文件路径")
-    private String imgUrl;
-
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
-
-    @ApiModelProperty(value = "逻辑删除 1（true）已删除， 0（false）未删除")
-    private Integer isDeleted;
+    @ApiModelProperty(value = "图片路径")
+    private String imageUrl;
 
 
 }

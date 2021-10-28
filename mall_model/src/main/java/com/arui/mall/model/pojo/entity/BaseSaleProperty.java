@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 商品图片表
+ * 基本销售属性表
  * </p>
  *
  * @author ...
@@ -21,8 +21,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SpuImage对象", description="商品图片表")
-public class SpuImage implements Serializable {
+@ApiModel(value="BaseSaleProperty对象", description="基本销售属性表")
+public class BaseSaleProperty implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,14 +30,8 @@ public class SpuImage implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "商品id")
-    private Long spuId;
-
-    @ApiModelProperty(value = "图片名称")
-    private String imageName;
-
-    @ApiModelProperty(value = "图片路径")
-    private String imageUrl;
+    @ApiModelProperty(value = "销售属性名称")
+    private String name;
 
 
 }

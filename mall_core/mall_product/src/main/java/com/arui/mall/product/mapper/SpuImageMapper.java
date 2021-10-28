@@ -1,6 +1,6 @@
 package com.arui.mall.product.mapper;
 
-import com.arui.mall.model.entity.SpuImage;
+import com.arui.mall.model.pojo.entity.SpuImage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

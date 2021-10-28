@@ -1,6 +1,6 @@
 package com.arui.mall.product.service;
 
-import com.arui.mall.model.entity.SpuPoster;
+import com.arui.mall.model.pojo.entity.SpuPoster;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,6 +1,6 @@
 package com.arui.mall.product.service;
 
-import com.arui.mall.model.entity.SpuSalePropertyValue;
+import com.arui.mall.model.pojo.entity.SpuSalePropertyValue;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

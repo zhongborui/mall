@@ -1,6 +1,6 @@
 package com.arui.mall.product.mapper;
 
-import com.arui.mall.model.entity.BaseCategory3;
+import com.arui.mall.model.pojo.entity.BaseCategory3;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

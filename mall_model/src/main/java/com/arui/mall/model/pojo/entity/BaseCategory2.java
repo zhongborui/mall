@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 属性值表
+ * 二级分类表
  * </p>
  *
  * @author ...
@@ -21,8 +21,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="PlatformPropertyValue对象", description="属性值表")
-public class PlatformPropertyValue implements Serializable {
+@ApiModel(value="BaseCategory2对象", description="二级分类表")
+public class BaseCategory2 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,11 +30,11 @@ public class PlatformPropertyValue implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "属性值名称")
-    private String propertyValue;
+    @ApiModelProperty(value = "二级分类名称")
+    private String name;
 
-    @ApiModelProperty(value = "属性id")
-    private Long propertyKeyId;
+    @ApiModelProperty(value = "一级分类编号")
+    private Long category1Id;
 
 
 }

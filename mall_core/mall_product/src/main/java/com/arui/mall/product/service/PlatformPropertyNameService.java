@@ -1,7 +1,10 @@
 package com.arui.mall.product.service;
 
-import com.arui.mall.model.entity.PlatformPropertyName;
+import com.arui.mall.model.pojo.entity.PlatformPropertyName;
+import com.arui.mall.model.pojo.vo.PlatformPropertyVO;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PlatformPropertyNameService extends IService<PlatformPropertyName> {
 
+    /**
+     * 根据三级id查询商品平台属性
+     * @param category1ID
+     * @param category2ID
+     * @param category3ID
+     * @return
+     */
+    List<PlatformPropertyVO> getPlatformPropertyByCategoryId(Long category1ID, Long category2ID, Long category3ID);
 }

@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 库存单元图片表
+ * sku平台属性值关联表
  * </p>
  *
  * @author ...
@@ -21,8 +21,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="SkuImage对象", description="库存单元图片表")
-public class SkuImage implements Serializable {
+@ApiModel(value="SkuPlatformPropertyValue对象", description="sku平台属性值关联表")
+public class SkuPlatformPropertyValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,20 +30,14 @@ public class SkuImage implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "sku的id")
+    @ApiModelProperty(value = "属性id（冗余)")
+    private Long propertyKeyId;
+
+    @ApiModelProperty(value = "属性值id")
+    private Long propertyValueId;
+
+    @ApiModelProperty(value = "skuid")
     private Long skuId;
-
-    @ApiModelProperty(value = "图片名称（冗余）")
-    private String imageName;
-
-    @ApiModelProperty(value = "图片路径(冗余)")
-    private String imageUrl;
-
-    @ApiModelProperty(value = "商品图片id")
-    private Long productImageId;
-
-    @ApiModelProperty(value = "是否默认")
-    private String isDefault;
 
 
 }

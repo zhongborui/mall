@@ -1,4 +1,4 @@
-package com.arui.mall.model.entity;
+package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 品牌表
+ * 库存单元图片表
  * </p>
  *
  * @author ...
@@ -21,8 +21,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="BaseBrand对象", description="品牌表")
-public class BaseBrand implements Serializable {
+@ApiModel(value="SkuImage对象", description="库存单元图片表")
+public class SkuImage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,11 +30,20 @@ public class BaseBrand implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "品牌名称")
-    private String brandName;
+    @ApiModelProperty(value = "sku的id")
+    private Long skuId;
 
-    @ApiModelProperty(value = "品牌logo的图片路径")
-    private String brandLogoUrl;
+    @ApiModelProperty(value = "图片名称（冗余）")
+    private String imageName;
+
+    @ApiModelProperty(value = "图片路径(冗余)")
+    private String imageUrl;
+
+    @ApiModelProperty(value = "商品图片id")
+    private Long productImageId;
+
+    @ApiModelProperty(value = "是否默认")
+    private String isDefault;
 
 
 }

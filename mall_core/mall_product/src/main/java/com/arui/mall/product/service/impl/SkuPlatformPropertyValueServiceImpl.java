@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.SkuPlatformPropertyValue;
+import com.arui.mall.model.pojo.entity.SkuPlatformPropertyValue;
 import com.arui.mall.product.mapper.SkuPlatformPropertyValueMapper;
 import com.arui.mall.product.service.SkuPlatformPropertyValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

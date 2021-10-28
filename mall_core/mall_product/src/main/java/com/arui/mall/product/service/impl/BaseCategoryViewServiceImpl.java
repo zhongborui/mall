@@ -1,6 +1,6 @@
 package com.arui.mall.product.service.impl;
 
-import com.arui.mall.model.entity.BaseCategoryView;
+import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.product.mapper.BaseCategoryViewMapper;
 import com.arui.mall.product.service.BaseCategoryViewService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

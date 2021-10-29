@@ -24,4 +24,10 @@ public interface PlatformPropertyNameService extends IService<PlatformPropertyNa
      * @return
      */
     List<PlatformPropertyVO> getPlatformPropertyByCategoryId(Long category1ID, Long category2ID, Long category3ID);
+
+    /**
+     * 新增或者修改平台属性
+     * @param platformPropertyVO
+     */
+    void savePlatformProperty(PlatformPropertyVO platformPropertyVO);
 }

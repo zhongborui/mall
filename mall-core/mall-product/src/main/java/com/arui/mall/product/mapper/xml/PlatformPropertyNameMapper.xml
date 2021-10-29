@@ -5,7 +5,7 @@
     <resultMap id="platformPropertyMap" type="com.arui.mall.model.pojo.vo.PlatformPropertyVO" autoMapping="true">
         <id property="id" column="id"></id>
 
-        <collection property="platformPropertyValueVOList" ofType="com.arui.mall.model.pojo.vo.PlatformPropertyValueVO" autoMapping="true">
+        <collection property="propertyValueList" ofType="com.arui.mall.model.pojo.vo.PlatformPropertyValueVO" autoMapping="true">
             <id property="id" column="property_value_id"></id>
         </collection>
     </resultMap>

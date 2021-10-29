@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>
@@ -119,6 +120,14 @@ public class AdminBaseBrandController {
         String path = storageClient1.upload_appender_file1(file.getBytes(), extensionName, null);
         String imageUrl = prefix + path;
         return R.ok(imageUrl);
+    }
+
+    //http://127.0.0.1/product/brand/getAllBrand
+    @ApiOperation(value = "返回全部商品品牌")
+    @GetMapping("/brand/getAllBrand")
+    public R getAllBrand(){
+        List<BaseBrand> list = baseBrandService.list(null);
+        return R.ok(list);
     }
 }
 

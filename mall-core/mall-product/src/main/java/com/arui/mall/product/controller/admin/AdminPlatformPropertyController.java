@@ -22,7 +22,6 @@ import java.util.List;
  * @author ...
  * @since 2021-10-28
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/product")
 @Api(tags = "后台管理商品平台属性")

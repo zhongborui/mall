@@ -24,7 +24,6 @@ import java.util.List;
  * @author ...
  * @since 2021-10-28
  */
-@CrossOrigin
 @Api(tags = "后台管理商品三级分类")
 @RestController
 @RequestMapping("/product")

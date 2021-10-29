@@ -1,0 +1,35 @@
+#spring:
+#  profiles:
+#    active: dev
+spring:
+  application:
+    name: mall-gateway
+  redis:
+    host: vm.com
+    port: 6389
+  cloud:
+    nacos:
+      discovery:
+        server-addr: vm.com:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true # gateway可以发现nacos中的微服务，并自动生成转发路由
+          # 转发规则 http://Gateway_HOST:Gateway_PORT/serviceId/**(path)
+
+      routes:
+        - id: mall-product
+          uri: lb://mall-product
+          predicates:
+            - Path=/product/**
+#        - id: service-sms
+#          uri: lb://service-sms
+#          predicates:
+#            - Path=/*/sms/**
+#        - id: service-oss
+#          uri: lb://service-oss
+#          predicates:
+#            - Path=/*/oss/**
+
+server:
+  port: 80

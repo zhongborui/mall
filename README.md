@@ -48,6 +48,7 @@ mall
 	|__ mall-web-utils web工具类
 |__ mall-model 实体类
 |__ mall-mbg mybatis_plus代码生成
+|__ mall-gateway 网关
 ```
 
 
@@ -64,6 +65,7 @@ mall
 | Swagger2                          | 文档生成工具           | https://github.com/swagger-api/swagger-ui       |
 | Logback                           | 日志系统               | http://logback.qos.ch/                          |
 | Spring Data Redis                 | 缓冲层框架             | https://spring.io/projects/spring-data-redis    |
+| FastDFS                           | 文件系统               | https://github.com/happyfish100/fastdfs         |
 
 
 

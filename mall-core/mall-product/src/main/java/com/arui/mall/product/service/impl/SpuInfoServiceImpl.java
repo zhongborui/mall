@@ -10,6 +10,7 @@ import com.arui.mall.product.service.SpuSalePropertyValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
      * 新增SPU
      * @param spuInfoVO
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveSpu(SpuInfoVO spuInfoVO) {
         SpuInfo spuInfo = new SpuInfo();
@@ -46,7 +48,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         baseMapper.insert(spuInfo);
 
         // 返回spu-id
-        Long id = spuInfoVO.getId();
+        Long id = spuInfo.getId();
 
         // 插入图片
         List<SpuImage> productImageList = spuInfoVO.getProductImageList();
@@ -61,6 +63,10 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper, SpuInfo> impl
         for (SpuSalePropertyName spuSalePropertyName : salePropertyKeyList) {
             spuSalePropertyName.setSpuId(id);
             List<SpuSalePropertyValue> salePropertyValueList = spuSalePropertyName.getSalePropertyValueList();
+            for (SpuSalePropertyValue spuSalePropertyValue : salePropertyValueList) {
+                spuSalePropertyValue.setSpuId(id);
+                spuSalePropertyValue.setSalePropertyKeyName(spuSalePropertyName.getSalePropertyKeyName());
+            }
             spuSalePropertyValueService.saveBatch(salePropertyValueList);
 
         }

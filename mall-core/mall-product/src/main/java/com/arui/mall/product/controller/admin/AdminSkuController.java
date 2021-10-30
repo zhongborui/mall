@@ -62,6 +62,30 @@ public class AdminSkuController {
         skuInfoService.page(skuInfoPage, skuInfoQueryWrapper);
         return R.ok(skuInfoPage);
     }
-    
+
+    /**
+     * //http://127.0.0.1/product/onSale/40
+     * @param skuId
+     * @return
+     */
+    @ApiOperation(value = "sku上架")
+    @GetMapping("onSale/{skuId}")
+    public R onSale(@PathVariable Long skuId){
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(1);
+        skuInfoService.updateById(skuInfo);
+        return R.ok();
+    }
+
+    @ApiOperation(value = "sku下架")
+    @GetMapping("offSale/{skuId}")
+    public R offSale(@PathVariable Long skuId){
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(0);
+        skuInfoService.updateById(skuInfo);
+        return R.ok();
+    }
 }
 

@@ -6,6 +6,7 @@ import com.arui.mall.model.pojo.entity.SkuInfo;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
 import com.arui.mall.product.service.SkuInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,21 +47,21 @@ public class AdminSkuController {
 
     /**
      * http://127.0.0.1/product/querySkuInfoByPage/1/10
-     * @param currentPageN
+     * @param currentPageNum
      * @param pageSize
      * @return
      */
     @ApiOperation(value = "sku分页展示")
-    @GetMapping("querySkuInfoByPage/{currentPageN}/{pageSize}")
+    @GetMapping("querySkuInfoByPage/{currentPageNum}/{pageSize}")
     public R querySkuInfoByPage(
-            @PathVariable Long currentPageN,
+            @PathVariable Long currentPageNum,
             @PathVariable Long pageSize
     ){
-        Page<SkuInfo> skuInfoPage = new Page<>(currentPageN, pageSize);
+        Page<SkuInfo> skuInfoPage = new Page<>(currentPageNum, pageSize);
         QueryWrapper<SkuInfo> skuInfoQueryWrapper = new QueryWrapper<>();
         skuInfoQueryWrapper.orderByDesc("id");
-        skuInfoService.page(skuInfoPage, skuInfoQueryWrapper);
-        return R.ok(skuInfoPage);
+        IPage<SkuInfo> page = skuInfoService.page(skuInfoPage, skuInfoQueryWrapper);
+        return R.ok(page);
     }
 
     /**

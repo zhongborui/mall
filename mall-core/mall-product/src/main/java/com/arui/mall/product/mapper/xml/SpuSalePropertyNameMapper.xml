@@ -2,4 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.arui.mall.product.mapper.SpuSalePropertyNameMapper">
 
+
+    <resultMap id="salePropertyMap" type="com.arui.mall.model.pojo.entity.SpuSalePropertyName" autoMapping="true">
+        <id property="id" column="id"></id>
+        <collection property="salePropertyValueList" ofType="com.arui.mall.model.pojo.entity.SpuSalePropertyValue"
+                    autoMapping="true">
+            <id property="id" column="sale_property_value_id"></id>
+        </collection>
+    </resultMap>
+
+    <select id="querySalePropertyByProductId" resultMap="salePropertyMap">
+        SELECT
+        n.id,
+        n.spu_id,
+        n.sale_property_key_id,
+        v.id sale_property_value_id,
+        v.spu_id,
+        v.sale_property_key_name,
+        sale_property_value_name
+        FROM
+            `spu_sale_property_value` v
+            JOIN `spu_sale_property_name` n
+            ON v.sale_property_key_id = n.sale_property_key_id
+            AND v.spu_id = n.spu_id
+        WHERE
+            n.spu_id = #{productId}
+    </select>
 </mapper>

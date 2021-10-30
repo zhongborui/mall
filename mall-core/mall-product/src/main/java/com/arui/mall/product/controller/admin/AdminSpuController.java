@@ -3,10 +3,15 @@ package com.arui.mall.product.controller.admin;
 
 import com.arui.mall.common.result.R;
 import com.arui.mall.model.pojo.entity.BaseSaleProperty;
+import com.arui.mall.model.pojo.entity.SpuImage;
 import com.arui.mall.model.pojo.entity.SpuInfo;
+import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
 import com.arui.mall.model.pojo.vo.SpuInfoVO;
 import com.arui.mall.product.service.BaseSalePropertyService;
+import com.arui.mall.product.service.SpuImageService;
 import com.arui.mall.product.service.SpuInfoService;
+import com.arui.mall.product.service.SpuSalePropertyNameService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -35,7 +40,13 @@ public class AdminSpuController {
     private SpuInfoService spuInfoService;
 
     @Resource
+    private SpuSalePropertyNameService spuSalePropertyNameService;
+
+    @Resource
     private BaseSalePropertyService baseSalePropertyService;
+
+    @Resource
+    private SpuImageService spuImageService;
 
     // http://127.0.0.1/product/queryProductSpuByPage/1/10/61
 
@@ -80,6 +91,28 @@ public class AdminSpuController {
             @RequestBody SpuInfoVO spuInfoVO){
         spuInfoService.saveSpu(spuInfoVO);
         return R.ok();
+    }
+
+    //http://127.0.0.1/product/querySalePropertyByProductId/20
+    @ApiOperation(value = "根据productId查询spu销售属性")
+    @GetMapping("querySalePropertyByProductId/{productId}")
+    public R querySalePropertyByProductId(
+            @ApiParam(value = "spuId")
+            @PathVariable Long productId){
+        List<SpuSalePropertyName> list = spuSalePropertyNameService.querySalePropertyByProductId(productId);
+        return R.ok(list);
+    }
+
+    //http://127.0.0.1/product/queryProductImageByProductId/20
+    @ApiOperation(value = "根据spuId查询spu照片集合")
+    @GetMapping("/queryProductImageByProductId/{productId}")
+    public R queryProductImageByProductId(
+            @ApiParam(value = "spuId")
+            @PathVariable Long productId){
+        QueryWrapper<SpuImage> spuImageQueryWrapper = new QueryWrapper<>();
+        spuImageQueryWrapper.eq("spu_id", productId);
+        List<SpuImage> list = spuImageService.list(spuImageQueryWrapper);
+        return R.ok(list);
     }
 }
 

@@ -33,7 +33,7 @@ public class SkuInfoVO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "商品id")
-    private Long productId;
+    private Long spuId;
 
     @ApiModelProperty(value = "价格")
     private BigDecimal price;

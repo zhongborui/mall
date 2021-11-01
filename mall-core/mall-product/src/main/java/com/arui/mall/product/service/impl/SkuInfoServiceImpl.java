@@ -50,7 +50,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         // 插入sku_info表
         SkuInfo skuInfo = new SkuInfo();
         BeanUtils.copyProperties(skuInfoVO, skuInfo);
-        Long productId = skuInfoVO.getProductId();
+        Long productId = skuInfoVO.getSpuId();
         skuInfo.setSpuId(productId);
         baseMapper.insert(skuInfo);
 

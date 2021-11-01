@@ -90,8 +90,9 @@ public class WebSkuController {
             @ApiParam(value = "skuId")
             @PathVariable Long skuId
     ){
-        BigDecimal skuPrice = skuInfoService.getSkuPrice(skuId);
-        return skuPrice;
+//        BigDecimal skuPrice = skuInfoService.getSkuPrice(skuId);
+        SkuInfo skuInfo = skuInfoService.getById(skuId);
+        return skuInfo.getPrice();
     }
 
     /**

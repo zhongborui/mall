@@ -4,10 +4,8 @@ import com.arui.mall.feign.fallback.ProductFeignClientFallback;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -34,8 +32,7 @@ public interface ProductFeignClient {
      * @param category3Id
      * @return
      */
-    @ApiOperation(value = "根据三级分类id获取sku的分类信息")
-    @GetMapping("CategoryView/{category3Id}")
+    @GetMapping("/web/sku/CategoryView/{category3Id}")
     public BaseCategoryView getCategoryViewByCategory3Id(
             @PathVariable Long category3Id
     ) ;
@@ -46,8 +43,7 @@ public interface ProductFeignClient {
      * @param skuId
      * @return
      */
-    @ApiOperation(value = "根据skuId获取sku价格")
-    @GetMapping("skuPrice/{skuId}")
+    @GetMapping("/web/sku/skuPrice/{skuId}")
     public BigDecimal getSkuPrice(
             @ApiParam(value = "skuId")
             @PathVariable Long skuId
@@ -60,13 +56,9 @@ public interface ProductFeignClient {
      * @param skuId
      * @return
      */
-    @ApiOperation(value = "根据skuId，spuId查询spu销售属性和选中的sku销售属性")
-    @GetMapping("getSpuSPNAndSkuSPNSelected/{spuId}/{skuId}")
+    @GetMapping("/web/sku/getSpuSPNAndSkuSPNSelected/{spuId}/{skuId}")
     public List<SpuSalePropertyName> getSpuSPNAndSkuSPNSelected(
-            @ApiParam(value = "spuId")
-
             @PathVariable Long spuId,
-            @ApiParam(value = "skuId")
             @PathVariable Long skuId
     ) ;
 
@@ -76,9 +68,7 @@ public interface ProductFeignClient {
      * @param spuId
      * @return
      */
-    @GetMapping("getSpuSPVAndSkuMapping/{spuId}")
-    @ApiOperation(value = "根据spuId查询spu销售属性组合对应的sku")
+    @GetMapping("/web/sku/getSpuSPVAndSkuMapping/{spuId}")
     public List<Map> getSpuSPVAndSkuMapping(
-            @ApiParam(value = "spuId")
             @PathVariable Long spuId);
 }

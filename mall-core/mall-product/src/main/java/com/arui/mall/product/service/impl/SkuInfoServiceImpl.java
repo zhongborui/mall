@@ -10,6 +10,7 @@ import com.arui.mall.product.service.SkuImageService;
 import com.arui.mall.product.service.SkuInfoService;
 import com.arui.mall.product.service.SkuPlatformPropertyValueService;
 import com.arui.mall.product.service.SkuSalePropertyValueService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jdk.nashorn.internal.ir.CallNode;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,6 +31,9 @@ import java.util.List;
  */
 @Service
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> implements SkuInfoService {
+
+    @Resource
+    private SkuInfoService skuInfoService;
 
     @Resource
     private SkuPlatformPropertyValueService skuPlatformPropertyValueService;
@@ -73,5 +78,31 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             skuImage.setSkuId(id);
         }
         skuImageService.saveBatch(skuImageList);
+    }
+
+    @Override
+    public SkuInfoVO getSkuDetailById(Long skuId) {
+        SkuInfoVO skuInfoVO = new SkuInfoVO();
+
+        SkuInfo skuInfo = baseMapper.selectById(skuId);
+        if (skuInfoVO != null){
+            BeanUtils.copyProperties(skuInfo, skuInfoVO);
+
+            QueryWrapper<SkuImage> skuImageQueryWrapper = new QueryWrapper<>();
+            skuImageQueryWrapper.eq("sku_id", skuId);
+            List<SkuImage> list = skuImageService.list(skuImageQueryWrapper);
+            skuInfoVO.setSkuImageList(list);
+        }
+
+        return skuInfoVO;
+    }
+
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+
+        QueryWrapper<SkuInfo> skuInfoQueryWrapper = new QueryWrapper<>();
+        skuInfoQueryWrapper.select("price").eq("id", skuId);
+        BigDecimal price = (BigDecimal) skuInfoService.getObj(skuInfoQueryWrapper);
+        return price;
     }
 }

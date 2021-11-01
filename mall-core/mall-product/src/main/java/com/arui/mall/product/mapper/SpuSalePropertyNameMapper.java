@@ -21,4 +21,13 @@ public interface SpuSalePropertyNameMapper extends BaseMapper<SpuSalePropertyNam
      * @return
      */
     List<SpuSalePropertyName> querySalePropertyByProductId(Long productId);
+
+    /**
+     * 根据skuId，spuId查询spu销售属性和选中的sku销售属性
+     * spuSalePropertyName
+     * @param spuId
+     * @param skuId
+     * @return
+     */
+    List<SpuSalePropertyName> getSpuSPNAndSkuSPNSelected(Long spuId, Long skuId);
 }

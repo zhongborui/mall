@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.arui.mall.product.mapper.SkuSalePropertyValueMapper">
 
+
+    <select id="getSpuSPVAndSkuMapping" resultType="java.util.Map">
+        SELECT
+            sku_id,
+            GROUP_CONCAT(sale_property_value_id SEPARATOR "|") sale_property_value_id
+        FROM
+            `sku_sale_property_value`
+        WHERE
+            product_id = #{spuId}
+            GROUP BY sku_id
+    </select>
 </mapper>

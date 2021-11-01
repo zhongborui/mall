@@ -1,6 +1,7 @@
 package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -42,5 +44,7 @@ public class SpuSalePropertyValue implements Serializable {
     @ApiModelProperty(value = "销售属性值名称")
     private String salePropertyValueName;
 
+    @TableField(exist = false)
+    private Integer isSelected;
 
 }

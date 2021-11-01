@@ -28,4 +28,35 @@
         WHERE
             n.spu_id = #{productId}
     </select>
+
+
+
+
+    <resultMap id="spuSalePropertyAndSelected" type="com.arui.mall.model.pojo.entity.SpuSalePropertyName" autoMapping="true">
+        <id property="id" column="id"></id>
+        <collection property="salePropertyValueList" ofType="com.arui.mall.model.pojo.entity.SpuSalePropertyValue" autoMapping="true">
+            <id property="id" column="sale_property_value_id"></id>
+        </collection>
+    </resultMap>
+
+    <!-- 根据skuId，spuId查询spu销售属性和选中的sku销售属性-->
+    <select id="getSpuSPNAndSkuSPNSelected" resultMap="spuSalePropertyAndSelected">
+        SELECT
+            a.id,
+            a.spu_id,
+            a.sale_property_key_id,
+            a.sale_property_key_name,
+            b.id sale_property_value_id,
+            b.sale_property_value_name,
+        IF
+            ( c.sku_id IS NULL, 0, 1 ) is_selected
+        FROM
+            spu_sale_property_name a
+            JOIN spu_sale_property_value b ON a.spu_id = b.spu_id
+            AND a.sale_property_key_id = b.sale_property_key_id
+            LEFT JOIN sku_sale_property_value c ON c.sale_property_value_id = b.id
+            AND c.sku_id = #{skuId}
+        WHERE
+            a.spu_id = #{spuId}
+    </select>
 </mapper>

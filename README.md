@@ -49,6 +49,8 @@ mall
 |__ mall-model 实体类
 |__ mall-mbg mybatis_plus代码生成
 |__ mall-gateway 网关
+|__ mall-web 服务端渲染
+|__ mall-feign-client 远程调用
 ```
 
 
@@ -76,3 +78,13 @@ mall
 | MySQL 5.7    | 关系型数据库 | https://www.mysql.com/    |
 | Redis 5.0    | 缓存技术     | https://redis.io/         |
 | RabbitMQ 3.8 | 消息中间件   | https://www.rabbitmq.com/ |
+
+
+
+# 完成进度
+
+| 项目功能模块     | 是否完成 |
+| :--------------- | -------- |
+| 后台商品管理系统 | ✔        |
+| 前台商品详情页   | ✔        |
+

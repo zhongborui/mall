@@ -58,5 +58,9 @@
             AND c.sku_id = #{skuId}
         WHERE
             a.spu_id = #{spuId}
+         # 解决销售属性乱序问题
+        ORDER BY
+        a.sale_property_key_id,
+        b.id
     </select>
 </mapper>

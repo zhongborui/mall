@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BaseBrandService extends IService<BaseBrand> {
 
+    /**
+     * testLocalLock
+     */
+    void testLocalLock();
 }

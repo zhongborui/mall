@@ -1,5 +1,6 @@
 package com.arui.mall.product.service.impl;
 
+import com.arui.mall.core.constant.RedisConstant;
 import com.arui.mall.model.pojo.entity.SkuImage;
 import com.arui.mall.model.pojo.entity.SkuInfo;
 import com.arui.mall.model.pojo.entity.SkuPlatformPropertyValue;
@@ -13,13 +14,17 @@ import com.arui.mall.product.service.SkuSalePropertyValueService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jdk.nashorn.internal.ir.CallNode;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -43,6 +48,12 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
     @Resource
     private SkuImageService skuImageService;
+
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -80,8 +91,53 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
         skuImageService.saveBatch(skuImageList);
     }
 
+    /**
+     * 通过redisson提供分布式锁解决线程安全问题
+     * @param skuId
+     * @return
+     */
     @Override
     public SkuInfoVO getSkuDetailById(Long skuId) {
+        String skuKey = RedisConstant.SKUKEY_PREFIX + skuId + RedisConstant.SKUKEY_SUFFIX;
+        SkuInfoVO skuInfoVO = (SkuInfoVO) redisTemplate.opsForValue().get(skuKey);
+
+        if (skuInfoVO == null){
+            // 缓存中数据为空，查数据库
+            String skuLockKey = RedisConstant.SKUKEY_PREFIX + skuId + RedisConstant.SKULOCK_SUFFIX;
+            // 初始化锁
+            RLock lock = redissonClient.getLock(skuLockKey);
+            try {
+                // 尝试获得锁
+                boolean acquireLock = lock.tryLock(RedisConstant.WAITTIN_GET_LOCK_TIME, RedisConstant.LOCK_EXPIRE_TIME, TimeUnit.SECONDS);
+                if (acquireLock){
+                    SkuInfoVO skuInfoVOFromDB = getSkuInfoVOFromDB(skuId);
+                    // 设置空值防止缓存穿透
+                    if (skuInfoVOFromDB == null){
+                        SkuInfoVO emptySkuInVO = new SkuInfoVO();
+                        redisTemplate.opsForValue().set(skuKey, emptySkuInVO, RedisConstant.SKUKEY_TIMEOUT, TimeUnit.SECONDS);
+                        return emptySkuInVO;
+                    }
+
+                    // 将数据放到缓存中
+                    redisTemplate.opsForValue().set(skuKey, skuInfoVOFromDB, RedisConstant.SKUKEY_TEMPORARY_TIMEOUT, TimeUnit.SECONDS);
+
+                    return skuInfoVOFromDB;
+                }
+            }catch (Exception e){
+                //自旋
+                return getSkuDetailById(skuId);
+            }finally {
+                lock.unlock();
+            }
+        }else {
+            // 缓存中有数据，直接返回
+            return skuInfoVO;
+        }
+        return null;
+
+    }
+
+    private SkuInfoVO getSkuInfoVOFromDB(Long skuId) {
         SkuInfoVO skuInfoVO = new SkuInfoVO();
 
         SkuInfo skuInfo = baseMapper.selectById(skuId);

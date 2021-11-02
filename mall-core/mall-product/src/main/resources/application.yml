@@ -18,8 +18,12 @@ spring:
     username: guest
     password: guest
   redis:
-    host: vm.com
-    post: 6389
+#    host: vm.com
+#    port: 6389
+#    database: 0
+#    timeout: 1800000
+    port: 6379
+    host: localhost
     database: 0
     timeout: 1800000
   datasource:

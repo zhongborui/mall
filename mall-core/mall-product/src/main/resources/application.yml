@@ -18,14 +18,11 @@ spring:
     username: guest
     password: guest
   redis:
-#    host: vm.com
-#    port: 6389
-#    database: 0
-#    timeout: 1800000
-    port: 6379
-    host: localhost
+    host: vm.com
+    port: 6389
     database: 0
     timeout: 1800000
+
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver

@@ -103,13 +103,15 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
         if (skuInfoVO == null){
             // 缓存中数据为空，查数据库
-            String skuLockKey = RedisConstant.SKUKEY_PREFIX + skuId + RedisConstant.SKULOCK_SUFFIX;
+
             // 初始化锁
+            String skuLockKey = RedisConstant.SKUKEY_PREFIX + skuId + RedisConstant.SKULOCK_SUFFIX;
             RLock lock = redissonClient.getLock(skuLockKey);
             try {
                 // 尝试获得锁
                 boolean acquireLock = lock.tryLock(RedisConstant.WAITTIN_GET_LOCK_TIME, RedisConstant.LOCK_EXPIRE_TIME, TimeUnit.SECONDS);
                 if (acquireLock){
+                    // 查数据库
                     SkuInfoVO skuInfoVOFromDB = getSkuInfoVOFromDB(skuId);
                     // 设置空值防止缓存穿透
                     if (skuInfoVOFromDB == null){
@@ -122,10 +124,12 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
                     redisTemplate.opsForValue().set(skuKey, skuInfoVOFromDB, RedisConstant.SKUKEY_TEMPORARY_TIMEOUT, TimeUnit.SECONDS);
 
                     return skuInfoVOFromDB;
+                }else {
+                    //自旋
+                    return getSkuDetailById(skuId);
                 }
             }catch (Exception e){
-                //自旋
-                return getSkuDetailById(skuId);
+                e.printStackTrace();
             }finally {
                 lock.unlock();
             }

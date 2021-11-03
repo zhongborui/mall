@@ -98,6 +98,16 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
      */
     @Override
     public SkuInfoVO getSkuDetailById(Long skuId) {
+        SkuInfoVO skuInfoVO = getSkuInfoVOByRedisson(skuId);
+        return skuInfoVO;
+    }
+
+    /**
+     * 通过redisson提供分布式锁解决线程安全问题
+     * @param skuId
+     * @return
+     */
+    private SkuInfoVO getSkuInfoVOByRedisson(Long skuId) {
         String skuKey = RedisConstant.SKUKEY_PREFIX + skuId + RedisConstant.SKUKEY_SUFFIX;
         SkuInfoVO skuInfoVO = (SkuInfoVO) redisTemplate.opsForValue().get(skuKey);
 
@@ -125,8 +135,14 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
 
                     return skuInfoVOFromDB;
                 }else {
-                    //自旋
-                    return getSkuDetailById(skuId);
+                    try{
+                        // 获取锁失败，睡眠1s，自旋获取
+                        Thread.sleep(50);
+                        return getSkuDetailById(skuId);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -138,9 +154,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
             return skuInfoVO;
         }
         return null;
-
     }
 
+    /**
+     * 从数据库获取skuVO
+     * @param skuId
+     * @return
+     */
     private SkuInfoVO getSkuInfoVOFromDB(Long skuId) {
         SkuInfoVO skuInfoVO = new SkuInfoVO();
 

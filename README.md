@@ -49,7 +49,7 @@ mall
 |__ mall-model 实体类
 |__ mall-mbg mybatis_plus代码生成
 |__ mall-gateway 网关
-|__ mall-web 服务端渲染
+|__ mall-web 调用core获取数据，服务端渲染
 |__ mall-feign-client 远程调用
 ```
 
@@ -68,6 +68,7 @@ mall
 | Logback                           | 日志系统               | http://logback.qos.ch/                          |
 | Spring Data Redis                 | 缓冲层框架             | https://spring.io/projects/spring-data-redis    |
 | FastDFS                           | 文件系统               | https://github.com/happyfish100/fastdfs         |
+| Redisson 3.11.2                   | 分布式锁               | https://github.com/redisson/redisson            |
 
 
 
@@ -83,8 +84,9 @@ mall
 
 # 完成进度
 
-| 项目功能模块     | 是否完成 |
-| :--------------- | -------- |
-| 后台商品管理系统 | ✔        |
-| 前台商品详情页   | ✔        |
+| 项目功能模块                                   | 是否完成 |
+| :--------------------------------------------- | -------- |
+| 后台商品管理系统                               | ✔        |
+| 前台商品详情页                                 | ✔        |
+| 商品详情页优化，AOP切面（Redis缓存、分布式锁） | ✔        |
 

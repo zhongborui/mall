@@ -32,5 +32,10 @@ spring:
           uri: lb://mall-web
           predicates:
             - Host=www.mall.com
+
+        - id: mall-search
+          uri: lb://mall-search
+          predicates:
+            - Host=search.mall.com
 server:
   port: 80

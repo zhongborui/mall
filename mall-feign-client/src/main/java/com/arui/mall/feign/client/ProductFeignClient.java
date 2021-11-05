@@ -2,8 +2,10 @@ package com.arui.mall.feign.client;
 
 import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.feign.fallback.ProductFeignClientFallback;
+import com.arui.mall.model.pojo.entity.BaseBrand;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
+import com.arui.mall.model.pojo.vo.PlatformPropertyVO;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -81,4 +83,20 @@ public interface ProductFeignClient {
      */
     @GetMapping("/getBaseCategoryList")
      List<JSONObject> getBaseCategoryList();
+
+    /**
+     * 返回平台属性信息
+     * @param category3Id
+     * @return
+     */
+    @GetMapping("/product/getPlatformProperty/{category3Id}")
+    public List<PlatformPropertyVO> getPlatformProperty(@PathVariable Long category3Id);
+
+    /**
+     * 返回品牌信息
+     * @param
+     * @return
+     */
+    @GetMapping("/product/getBrandInfo/{brandId}")
+    public BaseBrand getBrandInfo(@PathVariable Long brandId);
 }

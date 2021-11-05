@@ -1,0 +1,34 @@
+server:
+  port: 8001
+
+spring:
+  application:
+    name: mall-search
+  elasticsearch:
+    rest:
+      uris: vm.com:9200
+  cloud:
+    nacos:
+      discovery:
+        server-addr: vm.com:8848
+
+  rabbitmq:
+    host: vm.com
+    port: 5672
+    username: guest
+    password: guest
+
+  redis:
+    host: vm.com
+    port: 6389
+    database: 0
+    timeout: 1800000
+
+  feign:
+    sentinel:
+      enabled: true
+    client:
+      config:
+        default:
+          readTimeout: 3000
+          connectTimeout: 1000

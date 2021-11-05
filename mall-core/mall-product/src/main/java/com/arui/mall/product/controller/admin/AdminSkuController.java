@@ -2,6 +2,7 @@ package com.arui.mall.product.controller.admin;
 
 
 import com.arui.mall.common.result.R;
+import com.arui.mall.feign.client.SearchFeignClient;
 import com.arui.mall.model.pojo.entity.SkuInfo;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
 import com.arui.mall.product.service.SkuInfoService;
@@ -30,6 +31,9 @@ public class AdminSkuController {
 
     @Resource
     private SkuInfoService skuInfoService;
+
+    @Resource
+    private SearchFeignClient searchFeignClient;
 
     /**
      *     //http://127.0.0.1/product/saveSkuInfo
@@ -76,6 +80,7 @@ public class AdminSkuController {
         skuInfo.setId(skuId);
         skuInfo.setIsSale(1);
         skuInfoService.updateById(skuInfo);
+        searchFeignClient.onSale(skuId);
         return R.ok();
     }
 
@@ -86,6 +91,7 @@ public class AdminSkuController {
         skuInfo.setId(skuId);
         skuInfo.setIsSale(0);
         skuInfoService.updateById(skuInfo);
+        searchFeignClient.offSale(skuId);
         return R.ok();
     }
 }

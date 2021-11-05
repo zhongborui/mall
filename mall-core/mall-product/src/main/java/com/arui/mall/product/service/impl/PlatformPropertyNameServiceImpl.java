@@ -93,4 +93,10 @@ public class PlatformPropertyNameServiceImpl extends ServiceImpl<PlatformPropert
         // 批量插入数据
         platformPropertyValueService.saveBatch(platformPropertyValues);
     }
+
+    @Override
+    public List<PlatformPropertyVO> getPlatformProperty(Long category3Id) {
+        List<PlatformPropertyVO> platformPropertyVOList = baseMapper.getPlatformProperty(category3Id);
+        return platformPropertyVOList;
+    }
 }

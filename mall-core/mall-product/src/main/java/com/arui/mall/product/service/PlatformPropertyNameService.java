@@ -30,4 +30,11 @@ public interface PlatformPropertyNameService extends IService<PlatformPropertyNa
      * @param platformPropertyVO
      */
     void savePlatformProperty(PlatformPropertyVO platformPropertyVO);
+
+    /**
+     * 返回
+     * @param category3Id
+     * @return
+     */
+    List<PlatformPropertyVO> getPlatformProperty(Long category3Id);
 }

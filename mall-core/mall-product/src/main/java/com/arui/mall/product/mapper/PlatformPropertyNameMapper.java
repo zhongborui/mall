@@ -24,4 +24,11 @@ public interface PlatformPropertyNameMapper extends BaseMapper<PlatformPropertyN
      * @return
      */
     List<PlatformPropertyVO> getPlatformPropertyByCategoryId(Long category1Id, Long category2Id, Long category3Id);
+
+    /**
+     *
+     * @param category3Id
+     * @return
+     */
+    List<PlatformPropertyVO> getPlatformProperty(Long category3Id);
 }

@@ -1,7 +1,10 @@
 package com.arui.mall.product.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BaseCategoryViewService extends IService<BaseCategoryView> {
 
+    /**
+     * 查询首页三级分类信息
+     * @return
+     */
+    List<JSONObject> getBaseCategoryList();
 }

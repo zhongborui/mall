@@ -22,14 +22,15 @@ spring:
           uri: lb://mall-product
           predicates:
             - Path=/product/**
-#        - id: service-sms
-#          uri: lb://service-sms
-#          predicates:
-#            - Path=/*/sms/**
-#        - id: service-oss
-#          uri: lb://service-oss
-#          predicates:
-#            - Path=/*/oss/**
 
+        - id: mall-item
+          uri: lb://mall-web
+          predicates:
+            - Host=item.mall.com
+
+        - id: mall-index
+          uri: lb://mall-web
+          predicates:
+            - Host=www.mall.com
 server:
   port: 80

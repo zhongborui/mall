@@ -1,9 +1,11 @@
 package com.arui.mall.feign.client;
 
+import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.feign.fallback.ProductFeignClientFallback;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public interface ProductFeignClient {
      * @return
      */
     @GetMapping("/web/sku/skuDetail/{skuId}")
-    public SkuInfoVO getSkuDetailById(@PathVariable Long skuId);
+     SkuInfoVO getSkuDetailById(@PathVariable Long skuId);
 
     /**
      * 根据三级分类id获取sku的分类信息
@@ -33,7 +35,7 @@ public interface ProductFeignClient {
      * @return
      */
     @GetMapping("/web/sku/CategoryView/{category3Id}")
-    public BaseCategoryView getCategoryViewByCategory3Id(
+     BaseCategoryView getCategoryViewByCategory3Id(
             @PathVariable Long category3Id
     ) ;
 
@@ -44,7 +46,7 @@ public interface ProductFeignClient {
      * @return
      */
     @GetMapping("/web/sku/skuPrice/{skuId}")
-    public BigDecimal getSkuPrice(
+     BigDecimal getSkuPrice(
             @ApiParam(value = "skuId")
             @PathVariable Long skuId
     ) ;
@@ -57,7 +59,7 @@ public interface ProductFeignClient {
      * @return
      */
     @GetMapping("/web/sku/getSpuSPNAndSkuSPNSelected/{spuId}/{skuId}")
-    public List<SpuSalePropertyName> getSpuSPNAndSkuSPNSelected(
+     List<SpuSalePropertyName> getSpuSPNAndSkuSPNSelected(
             @PathVariable Long spuId,
             @PathVariable Long skuId
     ) ;
@@ -69,6 +71,14 @@ public interface ProductFeignClient {
      * @return
      */
     @GetMapping("/web/sku/getSpuSPVAndSkuMapping/{spuId}")
-    public List<Map> getSpuSPVAndSkuMapping(
+     List<Map> getSpuSPVAndSkuMapping(
             @PathVariable Long spuId);
+
+
+    /**
+     * 查询首页三级分类信息
+     * @return
+     */
+    @GetMapping("/getBaseCategoryList")
+     List<JSONObject> getBaseCategoryList();
 }

@@ -1,5 +1,6 @@
 package com.arui.mall.feign.fallback;
 
+import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.feign.client.ProductFeignClient;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
@@ -37,6 +38,11 @@ public class ProductFeignClientFallback implements ProductFeignClient {
 
     @Override
     public List<Map> getSpuSPVAndSkuMapping(Long spuId) {
+        return null;
+    }
+
+    @Override
+    public List<JSONObject> getBaseCategoryList() {
         return null;
     }
 }

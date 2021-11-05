@@ -1,6 +1,7 @@
 package com.arui.mall.product.controller.web;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SkuImage;
 import com.arui.mall.model.pojo.entity.SkuInfo;
@@ -126,6 +127,17 @@ public class WebSkuController {
             @PathVariable Long spuId){
         List<Map> map =  skuSalePropertyValueService.getSpuSPVAndSkuMapping(spuId);
         return map;
+    }
+
+    /**
+     * 查询首页三级分类信息
+     * @return
+     */
+    @GetMapping("/getBaseCategoryList")
+    @ApiOperation(value = "查询首页三级分类信息")
+    public List<JSONObject> getBaseCategoryList(){
+        List<JSONObject> list = categoryViewService.getBaseCategoryList();
+        return list;
     }
 }
 

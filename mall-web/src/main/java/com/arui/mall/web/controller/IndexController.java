@@ -20,12 +20,12 @@ public class IndexController {
     @Resource
     private ProductFeignClient productFeignClient;
 
-    @GetMapping(value = {"/", "index.html", "index"})
-    public String index(Model model){
-        List<JSONObject> baseCategoryList = productFeignClient.getBaseCategoryList();
-        List<JSONObject> list = baseCategoryList;
-        model.addAttribute("list", list);
-        return "index/index";
-    }
+//    @GetMapping(value = {"/", "index.html", "index"})
+//    public String index(Model model){
+//        List<JSONObject> baseCategoryList = productFeignClient.getBaseCategoryList();
+//        List<JSONObject> list = baseCategoryList;
+//        model.addAttribute("list", list);
+//        return "index/index";
+//    }
 
 }

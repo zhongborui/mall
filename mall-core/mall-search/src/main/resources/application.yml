@@ -24,11 +24,11 @@ spring:
     database: 0
     timeout: 1800000
 
-  feign:
-    sentinel:
-      enabled: true
-    client:
-      config:
-        default:
-          readTimeout: 3000
-          connectTimeout: 1000
+feign:
+  sentinel:
+    enabled: true
+  client:
+    config:
+      default:
+        readTimeout: 3000
+        connectTimeout: 1000

@@ -2,6 +2,7 @@ package com.arui.mall.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.arui.mall.feign.client.ProductFeignClient;
+import com.arui.mall.feign.client.SearchFeignClient;
 import com.arui.mall.model.pojo.entity.BaseCategoryView;
 import com.arui.mall.model.pojo.entity.SpuSalePropertyName;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
@@ -28,6 +29,9 @@ public class WebSkuDetailController {
 
     @Resource
     private ProductFeignClient productFeignClient;
+
+    @Resource
+    private SearchFeignClient searchFeignClient;
 
     @RequestMapping("{skuId}.html")
     public String getSkuDetail(@PathVariable Long skuId, Model model){
@@ -72,13 +76,19 @@ public class WebSkuDetailController {
             map.put("salePropertyValueIdJson", JSON.toJSONString(map2));
         }, MyThreadExecutor.getInstance());
 
+        //  浏览一次商品详情页，热度+1
+        CompletableFuture<Void> incrHostScoreFuture = CompletableFuture.runAsync(() -> {
+            searchFeignClient.incrHostScore(skuId);
+        });
+
         // 组合future
         CompletableFuture.allOf(
                 skuDetailSupplyAsync,
                 categoryViewFuture,
                 spuSalePropertyListFuture,
                 priceFuture,
-                spuSPVAndSkuMappingFuture
+                spuSPVAndSkuMappingFuture,
+                incrHostScoreFuture
         ).join();
 
         model.addAllAttributes(map);

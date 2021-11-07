@@ -15,4 +15,11 @@ public interface SearchService {
      * @param skuId
      */
     void offSale(Long skuId);
+
+    /**
+     * 增加热度
+     * @param skuId
+     */
+    void incrHostScore(Long skuId);
+
 }

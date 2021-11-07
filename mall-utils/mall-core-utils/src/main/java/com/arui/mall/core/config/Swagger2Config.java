@@ -75,7 +75,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 // api文档分组名
                 .groupName("searchApi")
-                .apiInfo(adminApiInfo())
+                .apiInfo(searchApiInfo())
                 .select()
                 // 正则匹配请求路径admin开头的
                 .paths(Predicates.and(PathSelectors.regex("/search/.*")))

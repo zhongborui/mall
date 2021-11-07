@@ -10,6 +10,7 @@ import com.arui.mall.model.search.Product;
 import com.arui.mall.model.search.SearchPlatformProperty;
 import com.arui.mall.search.repository.SearchRepository;
 import com.arui.mall.search.service.SearchService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +32,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Resource
     private SearchRepository searchRepository;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Override
     public void onSale(Long skuId) {
@@ -90,6 +95,23 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void offSale(Long skuId) {
         searchRepository.deleteById(skuId);
+    }
+
+    @Override
+    public void incrHostScore(Long skuId) {
+        // 引入redis作为缓存
+        Double cacheHotScore = redisTemplate.opsForZSet().incrementScore("sku:", "hotScore:" + skuId, 1);
+
+        boolean flag = (cacheHotScore % 10 == 0 )? true : false;
+
+        if (flag){
+            Optional<Product> skuById = searchRepository.findById(skuId);
+            if (skuById.isPresent()){
+                Product product = skuById.get();
+                product.setHotScore(Math.round(cacheHotScore));
+            }
+        }
+
     }
 
 }

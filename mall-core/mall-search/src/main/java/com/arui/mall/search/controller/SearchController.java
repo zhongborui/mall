@@ -7,19 +7,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 /**
  * @author ...
  */
+@Api(tags = "搜索相关api")
 @RestController
 @RequestMapping("/search")
-@Api(tags = "搜索相关api")
 public class SearchController {
     @Resource
     private ElasticsearchRestTemplate esRestTemplate;
@@ -54,6 +51,17 @@ public class SearchController {
     @GetMapping("offSale/{skuId}")
     public R offSale(@PathVariable Long skuId){
         searchService.offSale(skuId);
+        return R.ok();
+    }
+
+    /**
+     * 增加热度
+     * @param skuId
+     * @return
+     */
+    @GetMapping("incrHostScore/{skuId}")
+    public R incrHostScore(@PathVariable Long skuId){
+        searchService.incrHostScore(skuId);
         return R.ok();
     }
 }

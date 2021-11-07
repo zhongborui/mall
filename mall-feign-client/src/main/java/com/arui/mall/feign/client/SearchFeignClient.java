@@ -25,4 +25,12 @@ public interface SearchFeignClient {
      */
     @GetMapping("/search/offSale/{skuId}")
     public R offSale(@PathVariable Long skuId);
+
+    /**
+     * 增加热度
+     * @param skuId
+     * @return
+     */
+    @GetMapping("/search/incrHostScore/{skuId}")
+    public R incrHostScore(@PathVariable Long skuId);
 }

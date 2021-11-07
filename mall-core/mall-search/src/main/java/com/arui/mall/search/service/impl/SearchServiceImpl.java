@@ -109,6 +109,7 @@ public class SearchServiceImpl implements SearchService {
             if (skuById.isPresent()){
                 Product product = skuById.get();
                 product.setHotScore(Math.round(cacheHotScore));
+                searchRepository.save(product);
             }
         }
 

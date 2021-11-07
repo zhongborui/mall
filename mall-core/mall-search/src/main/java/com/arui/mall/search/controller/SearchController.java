@@ -2,6 +2,8 @@ package com.arui.mall.search.controller;
 
 import com.arui.mall.common.result.R;
 import com.arui.mall.model.search.Product;
+import com.arui.mall.model.search.SearchParam;
+import com.arui.mall.model.search.SearchResponseVO;
 import com.arui.mall.search.service.SearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -63,5 +65,17 @@ public class SearchController {
     public R incrHostScore(@PathVariable Long skuId){
         searchService.incrHostScore(skuId);
         return R.ok();
+    }
+
+    /**
+     * 商品搜索
+     * @param searchParam
+     * @return
+     */
+    @ApiOperation(value = "商品搜索")
+    @PostMapping("product")
+    public R searchProduct(@RequestBody SearchParam searchParam){
+        SearchResponseVO searchResponseVO =  searchService.searchProduct(searchParam);
+        return R.ok(searchResponseVO);
     }
 }

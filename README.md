@@ -1,6 +1,6 @@
 # 电商项目
 
-# [B站尚硅谷官方学习视频链接](https://www.bilibili.com/video/BV1np4y1C7Yf?spm_id_from=333.999.0.0)
+# 
 
 # 架构图
 
@@ -57,18 +57,19 @@ mall
 
 ## 核心技术栈
 
-| 技术                              | 说明                   | 官网                                            |
-| --------------------------------- | ---------------------- | ----------------------------------------------- |
-| SpringBoot 2.2.6.RELEASE          | 快速创建一个服务       | <https://spring.io/projects/spring-boot>        |
-| SpringCloud Hoxton.SR8            | 微服务治理             | https://spring.io/projects/spring-cloud         |
-| SpringCloud Alibaba 0.2.2.RELEASE | 微服务治理             | https://spring.io/projects/spring-cloud-alibaba |
-| Mybatis-Plus 3.0.5                | 持久层框架和代码生成器 | https://baomidou.com/                           |
-| Lombok                            | 简单实体类开发         | https://github.com/projectlombok/lombok         |
-| Swagger2                          | 文档生成工具           | https://github.com/swagger-api/swagger-ui       |
-| Logback                           | 日志系统               | http://logback.qos.ch/                          |
-| Spring Data Redis                 | 缓冲层框架             | https://spring.io/projects/spring-data-redis    |
-| FastDFS                           | 文件系统               | https://github.com/happyfish100/fastdfs         |
-| Redisson 3.11.2                   | 分布式锁               | https://github.com/redisson/redisson            |
+| 技术                              | 说明                   | 官网                                                 |
+| --------------------------------- | ---------------------- | ---------------------------------------------------- |
+| SpringBoot 2.2.6.RELEASE          | 快速创建一个服务       | <https://spring.io/projects/spring-boot>             |
+| SpringCloud Hoxton.SR8            | 微服务治理             | https://spring.io/projects/spring-cloud              |
+| SpringCloud Alibaba 0.2.2.RELEASE | 微服务治理             | https://spring.io/projects/spring-cloud-alibaba      |
+| Mybatis-Plus 3.0.5                | 持久层框架和代码生成器 | https://baomidou.com/                                |
+| Lombok                            | 简单实体类开发         | https://github.com/projectlombok/lombok              |
+| Swagger2                          | 文档生成工具           | https://github.com/swagger-api/swagger-ui            |
+| Logback                           | 日志系统               | http://logback.qos.ch/                               |
+| Spring Data Redis                 | 缓冲层框架             | https://spring.io/projects/spring-data-redis         |
+| FastDFS                           | 文件系统               | https://github.com/happyfish100/fastdfs              |
+| Redisson 3.11.2                   | 分布式锁               | https://github.com/redisson/redisson                 |
+| Spring Data ElasticSearch         | 搜索引擎               | https://spring.io/projects/spring-data-elasticsearch |
 
 
 
@@ -89,4 +90,6 @@ mall
 | 后台商品管理系统                               | ✔        |
 | 前台商品详情页                                 | ✔        |
 | 商品详情页优化，AOP切面（Redis缓存、分布式锁） | ✔        |
+| 商品上架、下架、热度排名（es）                 | ✔        |
+| 商品搜索（es）                                 | ✔        |
 

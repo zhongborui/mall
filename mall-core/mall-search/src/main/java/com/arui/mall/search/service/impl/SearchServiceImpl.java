@@ -203,6 +203,11 @@ public class SearchServiceImpl implements SearchService {
             String keyAsString = bucket.getKeyAsString();
             searchBrandVo.setBrandId(Long.parseLong(keyAsString));
 
+            ParsedStringTerms brandNameAgg = bucket.getAggregations().get("brandNameAgg");
+            //获取品牌的名称 由于在这里只有一条记录所有取第一条
+            String brandName = brandNameAgg.getBuckets().get(0).getKeyAsString();
+            searchBrandVo.setBrandName(brandName);
+
             // 获取子聚合
             ParsedStringTerms brandLogoUrlAgg = bucket.getAggregations().get("brandLogoUrlAgg");
             String brandLogoUrl = brandLogoUrlAgg.getBuckets().get(0).getKeyAsString();
@@ -313,7 +318,7 @@ public class SearchServiceImpl implements SearchService {
                 String filed = null;
                 switch (split[0]) {
                     case "1":
-                        filed = "hostScore";
+                        filed = "hotScore";
                         break;
                     case "2":
                         filed = "price";
@@ -321,7 +326,7 @@ public class SearchServiceImpl implements SearchService {
                 }
                 searchSourceBuilder.sort(filed, "asc".equals(split[1]) ? SortOrder.ASC : SortOrder.DESC);
             }else {
-                searchSourceBuilder.sort("hostScore", SortOrder.DESC);
+                searchSourceBuilder.sort("hotScore", SortOrder.DESC);
             }
         }
 

@@ -26,7 +26,7 @@ spring:
         - id: mall-item
           uri: lb://mall-web
           predicates:
-            - Host=item.mall.com
+            - Host=item.mall.com, item.gmall.com
 
         - id: mall-index
           uri: lb://mall-web

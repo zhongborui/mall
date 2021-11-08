@@ -15,6 +15,7 @@
         <module>mall-gateway</module>
         <module>mall-web</module>
         <module>mall-feign-client</module>
+        <module>mall-core/mall-user</module>
     </modules>
 
     <!--引入spring boot 版本依赖-->

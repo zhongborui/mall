@@ -36,7 +36,7 @@ spring:
         - id: mall-item
           uri: lb://mall-web
           predicates:
-            - Host=item.gmall.com, passport.gmall.com
+            - Host=item.gmall.com, passport.gmall.com, order.gmall.com, cart.gmall.com
 
         - id: mall-index
           uri: lb://mall-web
@@ -49,3 +49,6 @@ spring:
             - Host=search.gmall.com
 server:
   port: 80
+
+filter:
+  whiteList: "myOrder.html" #, cart.html

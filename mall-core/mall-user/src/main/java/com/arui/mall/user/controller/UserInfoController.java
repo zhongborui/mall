@@ -57,7 +57,7 @@ public class UserInfoController {
             Map<String, Object> redisMap = new HashMap<>();
             String ip = IpUtil.getIpAddress(request);
             Long id = userInfoFromDB.getId();
-            redisMap.put("ip", id);
+            redisMap.put("ip", ip);
             redisMap.put("userId", id);
             String redisStr = JSONObject.toJSONString(redisMap);
             redisTemplate.opsForValue().set(userKey, redisStr, RedisConstant.USERKEY_TIMEOUT, TimeUnit.SECONDS);

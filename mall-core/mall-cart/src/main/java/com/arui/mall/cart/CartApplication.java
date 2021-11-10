@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.arui.mall.feign.client")
 @MapperScan("com.arui.mall.cart.mapper")
 public class CartApplication {
     public static void main(String[] args) {

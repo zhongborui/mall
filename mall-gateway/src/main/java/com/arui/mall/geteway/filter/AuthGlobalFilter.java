@@ -3,13 +3,16 @@ package com.arui.mall.geteway.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.arui.mall.common.result.R;
 import com.arui.mall.common.result.RetValCodeEnum;
+import com.arui.mall.common.util.AuthContextHolder;
 import com.arui.mall.common.util.IpUtil;
+import com.arui.mall.geteway.constant.RedisConstant;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferWrapper;
+import org.springframework.data.redis.connection.RedisConnectionCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -98,8 +101,15 @@ public class AuthGlobalFilter implements GlobalFilter {
             }
         }
 
+        // 未登录添加购物车，前端随机生成的termId,封装到header给下游
+//        HttpCookie cookie = request.getCookies().getFirst("userTempId");
+//        if (!StringUtils.isEmpty(cookie) ){
+//            request.mutate().header("userTempId", cookie.getValue()).build();
+//            return chain.filter(exchange.mutate().request(request).build());
+//        }
+
         // 如果用户登录了，需要将userId 放置再header中，以便下游可以在request中获取userId
-        if (!StringUtils.isEmpty(userId)){
+        if (!StringUtils.isEmpty(userId) ){
             request.mutate().header("userId", userId).build();
             return chain.filter(exchange.mutate().request(request).build());
         }
@@ -127,13 +137,15 @@ public class AuthGlobalFilter implements GlobalFilter {
         }
         // 从redis中获得 userId
         if (!StringUtils.isEmpty(token)){
-            String userKey = "user:login:" + token;
+            String userKey = RedisConstant.USER_LOGIN_KEY_PREFIX + token;
+            Object o = redisTemplate.opsForValue().get(userKey);
             String valueFromRedis = (String) redisTemplate.opsForValue().get(userKey);
 
+
             // 重新登录
-            if (valueFromRedis == null){
-                return "-2";
-            }
+//            if (valueFromRedis == null){
+//                return "-2";
+//            }
             JSONObject jsonObject = JSONObject.parseObject(valueFromRedis);
             String userId = jsonObject.getString("userId");
 

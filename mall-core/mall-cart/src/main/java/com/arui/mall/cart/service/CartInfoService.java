@@ -13,4 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CartInfoService extends IService<CartInfo> {
 
+    /**
+     * 保存临时id购物车信息
+     * @param userTempId
+     * @param skuId
+     * @param skuNum
+     */
+    void addTempIdCart(String userTempId, Long skuId, Integer skuNum);
 }

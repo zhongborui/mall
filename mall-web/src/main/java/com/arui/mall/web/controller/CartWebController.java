@@ -45,4 +45,10 @@ public class CartWebController {
         cartFeignClient.addCart(Long.parseLong(skuId), Integer.parseInt(skuNum));
         return "cart/addCart";
     }
+
+    @GetMapping("cart.html")
+    public String toCartPage(){
+        return "cart/index";
+    }
+
 }

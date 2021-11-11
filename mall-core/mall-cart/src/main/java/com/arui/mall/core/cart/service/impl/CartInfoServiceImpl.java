@@ -2,6 +2,7 @@ package com.arui.mall.core.cart.service.impl;
 
 
 import com.arui.mall.core.cart.mapper.CartInfoMapper;
+import com.arui.mall.core.cart.service.AsyncCartInfoService;
 import com.arui.mall.core.cart.service.CartInfoService;
 import com.arui.mall.core.constant.RedisConstant;
 import com.arui.mall.feign.client.ProductFeignClient;
@@ -9,10 +10,12 @@ import com.arui.mall.model.pojo.entity.CartInfo;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -24,6 +27,9 @@ import javax.annotation.Resource;
  */
 @Service
 public class CartInfoServiceImpl extends ServiceImpl<CartInfoMapper, CartInfo> implements CartInfoService {
+
+    @Resource
+    private AsyncCartInfoService asyncCartInfoService;
 
     @Resource
     private ProductFeignClient productFeignClient;
@@ -48,30 +54,21 @@ public class CartInfoServiceImpl extends ServiceImpl<CartInfoMapper, CartInfo> i
         CartInfo cartInfoFromDb = baseMapper.selectOne(cartInfoQueryWrapper);
         if (cartInfoFromDb == null){
             // 直接插入DB
-            insertCartInfoToDb(cartInfo);
+            asyncCartInfoService.insertCartInfoToDb(cartInfo);
             // 更新数据到redis
             // 获得redisKey [user:userID:cart] skuId cartInfo
             String cartKey = getCartKey(finalUserId);
-            updateCartInfoRedis(cartKey,skuId.toString(), cartInfo);
+            asyncCartInfoService.updateCartInfoRedis(cartKey,skuId.toString(), cartInfo);
         }else {
             // 更新skuNum
             Integer newSkuNum = cartInfoFromDb.getSkuNum() + skuNum;
             cartInfoFromDb.setSkuNum(newSkuNum);
             baseMapper.updateById(cartInfoFromDb);
-            updateCartInfoRedis(getCartKey(finalUserId), skuId.toString(), cartInfoFromDb);
+            asyncCartInfoService.updateCartInfoRedis(getCartKey(finalUserId), skuId.toString(), cartInfoFromDb);
         }
     }
 
 
-    /**
-     * 更新数据到redis
-     * @param skuId
-     * @param cartInfo
-     * @param cartKey
-     */
-    private void updateCartInfoRedis(String cartKey, String skuId, CartInfo cartInfo) {
-        redisTemplate.opsForHash().put(cartKey, skuId, cartInfo);
-    }
 
     /**
      * 获得购物车实体类
@@ -90,14 +87,6 @@ public class CartInfoServiceImpl extends ServiceImpl<CartInfoMapper, CartInfo> i
         cartInfo.setImgUrl(skuDetailById.getSkuDefaultImg());
         cartInfo.setSkuName(skuDetailById.getSkuName());
         return cartInfo;
-    }
-
-    /**
-     * 插入临时购物车信息进入到数据库
-     * @param cartInfo
-     */
-    private void insertCartInfoToDb(CartInfo cartInfo) {
-        baseMapper.insert(cartInfo);
     }
 
     /**

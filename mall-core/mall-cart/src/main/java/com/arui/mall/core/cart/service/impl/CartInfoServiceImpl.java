@@ -10,12 +10,11 @@ import com.arui.mall.model.pojo.entity.CartInfo;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 /**
  * <p>
@@ -68,6 +67,32 @@ public class CartInfoServiceImpl extends ServiceImpl<CartInfoMapper, CartInfo> i
         }
     }
 
+    /**
+     * 展示购物车列表
+     * @param finalUserId
+     * @return
+     */
+    @Override
+    public List<CartInfo> getCartList(String finalUserId) {
+
+        // 从redis读数据cartList
+//        String cartKey = getCartKey(finalUserId);
+//        List<CartInfo> list = redisTemplate.opsForHash().values(cartKey);
+        List<CartInfo> cartListFromDb = getCartListFromDb(finalUserId);
+        return cartListFromDb;
+    }
+
+    /**
+     * 从数据库获取cartList
+     * @param finalUserId
+     * @return
+     */
+    private List<CartInfo> getCartListFromDb(String finalUserId) {
+        QueryWrapper<CartInfo> cartInfoQueryWrapper = new QueryWrapper<>();
+        cartInfoQueryWrapper.eq("user_id", finalUserId);
+        List<CartInfo> cartInfoList = baseMapper.selectList(cartInfoQueryWrapper);
+        return cartInfoList;
+    }
 
 
     /**

@@ -26,12 +26,17 @@ spring:
         - id: mall-index
           uri: lb://mall-web
           predicates:
-            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com, cart.gmall.com, api.gmall.com
+            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com, cart.gmall.com
 
         - id: mall-user
           uri: lb://mall-user
           predicates:
             - Path=/user/**
+
+        - id: mall-cart
+          uri: lb://mall-cart
+          predicates:
+            - Path=/cart/**
 
 server:
   port: 80

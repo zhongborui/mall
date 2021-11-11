@@ -22,4 +22,10 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     Map<String, String> loginCheck(UserInfo userInfo, String ip);
+
+    /**
+     * 退出
+     * @param token
+     */
+    void logout(String token);
 }

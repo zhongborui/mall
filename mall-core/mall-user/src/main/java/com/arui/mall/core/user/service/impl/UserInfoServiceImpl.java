@@ -60,6 +60,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     /**
+     * 退出
+     * @param token
+     */
+    @Override
+    public void logout(String token) {
+        String userKey = RedisConstant.USER_LOGIN_KEY_PREFIX + token;
+        redisTemplate.delete(userKey);
+    }
+
+    /**
      * // 验证通过，将用户信息存到token和redis(ip+userId)
      * @param ip
      * @param userInfoFromDb

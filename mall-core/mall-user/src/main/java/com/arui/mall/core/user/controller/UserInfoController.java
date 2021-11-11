@@ -5,11 +5,8 @@ import com.arui.mall.common.result.R;
 import com.arui.mall.common.util.IpUtil;
 import com.arui.mall.core.user.service.UserInfoService;
 import com.arui.mall.model.pojo.entity.UserInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import sun.net.util.IPAddressUtil;
 
 import javax.annotation.Resource;
@@ -42,6 +39,20 @@ public class UserInfoController {
         String ip = IpUtil.getIpAddress(request);
         Map<String, String> retMap = userInfoService.loginCheck(userInfo, ip);
         return R.ok(retMap);
+    }
+
+    /**
+     * http://api.gmall.com/user/logout
+     * 退出
+     * @param request
+     * @return
+     */
+    @GetMapping("logout")
+    public R logout(HttpServletRequest request){
+        String token = request.getHeader("token");
+        // redis中删除token
+        userInfoService.logout(token);
+        return R.ok();
     }
 }
 

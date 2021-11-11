@@ -35,26 +35,36 @@ public class AuthGlobalFilter implements GlobalFilter{
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-        // 登录页面直接访问
+        // 1.登录页面直接访问
         if (path.contains("login")){
             return chain.filter(exchange);
         }
-        // 内部接口不能访问，提示权限不够
+        // 2.内部接口不能访问，提示权限不够
         if (path.startsWith("/sku") || path.startsWith("/product")){
             return writeToBrowser(exchange, RetValCodeEnum.NO_PERMISSION);
         }
 
         // 判断用户是否携带token
-//        String token = hasToken(request);
-//
-//        if (!StringUtils.isEmpty(token)){
-//            // 通过token在redis中获取userId
-//            String userIdByTokenInRedis = getUserIdByTokenInRedis(request, token);
-//            if (userIdByTokenInRedis.equals("-1")){
-//                // 没有userId,
-//            }
-//
-//        }
+        String token = hasTokenOrTempId(request, "token");
+
+        if (!StringUtils.isEmpty(token)){
+            // 通过token在redis中获取userId
+            String userId = getUserIdByTokenInRedis(request, token);
+            if (userId.equals("-1")){
+                // 没有userId,
+            }else {
+                // 有userId
+                // 将userId 放置header， 提供给下游服务
+                request.mutate().header("userId", userId);
+            }
+        }
+
+        // 判断是否有临时id，放置header
+        String userTempId = hasTokenOrTempId(request, "userTempId");
+        if (!StringUtils.isEmpty(userTempId)) {
+            // userTempId 放置header， 提供给下游服务
+            request.mutate().header("userTempId", userTempId);
+        }
         return chain.filter(exchange);
     }
 
@@ -81,21 +91,22 @@ public class AuthGlobalFilter implements GlobalFilter{
     }
 
     /**
-     *  判断用户是否携带token
+     *  判断用户是否携带token或者tempId
      * @param request
+     * @param tokenOrTempId
      * @return
      */
-    private String hasToken(ServerHttpRequest request) {
+    private String hasTokenOrTempId(ServerHttpRequest request, String tokenOrTempId) {
         // url中是否存在
-        String token = request.getQueryParams().getFirst("token");
+        String token = request.getQueryParams().getFirst(tokenOrTempId);
         if (StringUtils.isEmpty(token)){
             // header是否有token
-            token = request.getHeaders().getFirst("token");
+            token = request.getHeaders().getFirst(tokenOrTempId);
             if (StringUtils.isEmpty(token)){
                 // cookie中是否有token
                 MultiValueMap<String, HttpCookie> cookies = request.getCookies();
                 if (!StringUtils.isEmpty(cookies)){
-                    HttpCookie httpCookie = cookies.getFirst("token");
+                    HttpCookie httpCookie = cookies.getFirst(tokenOrTempId);
                     if (!StringUtils.isEmpty(httpCookie)) {
                         token = httpCookie.getValue();
                     }else {

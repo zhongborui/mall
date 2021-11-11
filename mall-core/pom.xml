@@ -14,6 +14,7 @@
     <modules>
         <module>mall-search</module>
         <module>mall-product</module>
+        <module>mall-user</module>
     </modules>
 
     <dependencies>

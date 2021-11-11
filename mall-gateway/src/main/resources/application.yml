@@ -23,19 +23,15 @@ spring:
           predicates:
             - Path=/product/**
 
-        - id: mall-item
-          uri: lb://mall-web
-          predicates:
-            - Host=item.mall.com, item.gmall.com
-
         - id: mall-index
           uri: lb://mall-web
           predicates:
-            - Host=www.gmall.com
+            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com
 
-        - id: mall-search
-          uri: lb://mall-web
+        - id: mall-user
+          uri: lb://mall-user
           predicates:
-            - Host=search.gmall.com
+            - Path=/user/**
+
 server:
   port: 80

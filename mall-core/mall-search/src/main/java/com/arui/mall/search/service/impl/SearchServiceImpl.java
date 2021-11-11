@@ -123,7 +123,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void incrHostScore(Long skuId) {
         // 引入redis作为缓存
-        Double cacheHotScore = redisTemplate.opsForZSet().incrementScore("sku:", "hotScore:" + skuId, 1);
+        Double cacheHotScore = redisTemplate.opsForZSet().incrementScore("sku:hotScore", skuId, 1);
 
         boolean flag = (cacheHotScore % 10 == 0 )? true : false;
 

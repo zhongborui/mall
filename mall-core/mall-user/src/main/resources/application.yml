@@ -1,6 +1,7 @@
 server:
   port: 8002
 
+
 spring:
   application:
     name: mall-user
@@ -26,4 +27,4 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:com/arui/mall/user/mapper/xml/*.xml
+

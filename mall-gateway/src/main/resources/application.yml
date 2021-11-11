@@ -23,32 +23,20 @@ spring:
           predicates:
             - Path=/product/**
 
+        - id: mall-index
+          uri: lb://mall-web
+          predicates:
+            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com, cart.gmall.com
+
         - id: mall-user
           uri: lb://mall-user
           predicates:
             - Path=/user/**
 
-        - id: mall-apigmallcom
-          uri: lb://mall-user
+        - id: mall-cart
+          uri: lb://mall-cart
           predicates:
-            - Host=api.gmall.com
+            - Path=/cart/**
 
-        - id: mall-item
-          uri: lb://mall-web
-          predicates:
-            - Host=item.gmall.com, passport.gmall.com, order.gmall.com, cart.gmall.com
-
-        - id: mall-index
-          uri: lb://mall-web
-          predicates:
-            - Host=www.gmall.com
-
-        - id: mall-search
-          uri: lb://mall-web
-          predicates:
-            - Host=search.gmall.com
 server:
   port: 80
-
-filter:
-  whiteList: "myOrder.html" #, cart.html

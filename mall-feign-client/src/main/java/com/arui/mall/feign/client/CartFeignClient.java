@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @FeignClient(value = "mall-cart")
 public interface CartFeignClient {
-
     /**
-     * 添加购物车信息
+     * 保存购物车信息，如果skuId和termId都有，优先保存skuId
      * @param skuId
      * @param skuNum
      * @return
@@ -20,3 +19,4 @@ public interface CartFeignClient {
     @GetMapping("/cart/addCart/{skuId}/{skuNum}")
     public R addCart(@PathVariable Long skuId, @PathVariable Integer skuNum);
 }
+

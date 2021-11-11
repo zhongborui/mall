@@ -9,10 +9,11 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
- * 用户地址表
+ * 订单明细表
  * </p>
  *
  * @author ...
@@ -21,8 +22,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="UserAddress对象", description="用户地址表")
-public class UserAddress implements Serializable {
+@ApiModel(value="OrderDetail对象", description="订单明细表")
+public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,20 +31,23 @@ public class UserAddress implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "用户地址")
-    private String userAddress;
+    @ApiModelProperty(value = "订单编号")
+    private Long orderId;
 
-    @ApiModelProperty(value = "用户id")
-    private Long userId;
+    @ApiModelProperty(value = "sku_id")
+    private Long skuId;
 
-    @ApiModelProperty(value = "收件人")
-    private String consignee;
+    @ApiModelProperty(value = "sku名称（冗余)")
+    private String skuName;
 
-    @ApiModelProperty(value = "联系方式")
-    private String phoneNum;
+    @ApiModelProperty(value = "图片名称（冗余)")
+    private String imgUrl;
 
-    @ApiModelProperty(value = "是否是默认")
-    private String isDefault;
+    @ApiModelProperty(value = "购买价格(下单时sku价格）")
+    private BigDecimal orderPrice;
+
+    @ApiModelProperty(value = "购买个数")
+    private String skuNum;
 
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+
 /**
  * 用来对发起feign请求的拦截器
  * 在这里我们用它来把一个微服务的(用户id信息)传给另一个微服务

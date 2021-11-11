@@ -9,10 +9,11 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * <p>
- * 用户地址表
+ * 购物车表 用户登录系统时更新冗余
  * </p>
  *
  * @author ...
@@ -21,8 +22,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="UserAddress对象", description="用户地址表")
-public class UserAddress implements Serializable {
+@ApiModel(value="CartInfo对象", description="购物车表 用户登录系统时更新冗余")
+public class CartInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,20 +31,25 @@ public class UserAddress implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "用户地址")
-    private String userAddress;
-
     @ApiModelProperty(value = "用户id")
-    private Long userId;
+    private String userId;
 
-    @ApiModelProperty(value = "收件人")
-    private String consignee;
+    @ApiModelProperty(value = "skuid")
+    private Long skuId;
 
-    @ApiModelProperty(value = "联系方式")
-    private String phoneNum;
+    @ApiModelProperty(value = "放入购物车时价格")
+    private BigDecimal cartPrice;
 
-    @ApiModelProperty(value = "是否是默认")
-    private String isDefault;
+    @ApiModelProperty(value = "数量")
+    private Integer skuNum;
+
+    @ApiModelProperty(value = "图片文件")
+    private String imgUrl;
+
+    @ApiModelProperty(value = "sku名称 (冗余)")
+    private String skuName;
+
+    private Integer isChecked;
 
 
 }

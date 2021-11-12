@@ -12,9 +12,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -69,17 +74,58 @@ public class CartInfoServiceImpl extends ServiceImpl<CartInfoMapper, CartInfo> i
 
     /**
      * 展示购物车列表
-     * @param finalUserId
+     * @param userId
+     * @param userTempId
      * @return
      */
     @Override
-    public List<CartInfo> getCartList(String finalUserId) {
+    public List<CartInfo> getCartList(String userId, String userTempId) {
+        // 有临时id
+        if (!StringUtils.isEmpty(userTempId)){
+            // 先将tempId购物车列表查出来
+            List<CartInfo> cartListFromDbByUserTempId = getCartListFromDb(userTempId);
+            // 有userId，说明登录了，需要合并购物车
+            if (!StringUtils.isEmpty(userId)){
+                // 根据userId, 的购物车列表
+                List<CartInfo> cartListFromDb = getCartListFromDb(userId);
+                // skuId相同的skuNUm相加，否则，修改userId即可
+                // 将list转为map，这是登录用户的购物车
+                Map<Long, CartInfo> cartInfoMap = cartListFromDb.stream().collect(Collectors.toMap(CartInfo::getSkuId, cartInfo -> cartInfo));
+                // 需要删除的购物车
+                List<CartInfo> cartInfoDelete = new ArrayList<>();
+                for (CartInfo cartInfoTemp : cartListFromDbByUserTempId) {
+                    // 说明userId相等，skuNum相加
+                    if (cartInfoMap.containsKey(cartInfoTemp.getSkuId())){
+                        // 已登录的购物车
+                        CartInfo cartInfo1 = cartInfoMap.get(cartInfoTemp.getSkuId());
+                        cartInfo1.setSkuNum(cartInfo1.getSkuNum() + cartInfoTemp.getSkuNum());
+                        baseMapper.updateById(cartInfo1);
+                        cartInfoDelete.add(cartInfoTemp);
+                        QueryWrapper<CartInfo> cartInfoQueryWrapper = new QueryWrapper<>();
+                        cartInfoQueryWrapper.eq("user_id", userTempId);
+                        baseMapper.delete(cartInfoQueryWrapper);
+                    }else {
+                        // 不相等，修改临时用户购物车的userId
+                        cartInfoTemp.setUserId(userId);
+                        baseMapper.updateById(cartInfoTemp);
+                    }
+                }
+                // 返回合并购物车
+                return getCartListFromDb(userId);
+            }
+        }else{
+            if (!StringUtils.isEmpty(userId)){
+                // 只返回登录购物车
+                return getCartListFromDb(userId);
+            }
 
+        }
         // 从redis读数据cartList
 //        String cartKey = getCartKey(finalUserId);
 //        List<CartInfo> list = redisTemplate.opsForHash().values(cartKey);
-        List<CartInfo> cartListFromDb = getCartListFromDb(finalUserId);
-        return cartListFromDb;
+
+        // 只返回临时购物车
+        return getCartListFromDb(userTempId);
     }
 
     /**

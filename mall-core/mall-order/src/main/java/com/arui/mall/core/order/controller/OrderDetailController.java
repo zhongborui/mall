@@ -1,4 +1,4 @@
-package com.arui.mall.core.cart.controller;
+package com.arui.mall.core.order.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

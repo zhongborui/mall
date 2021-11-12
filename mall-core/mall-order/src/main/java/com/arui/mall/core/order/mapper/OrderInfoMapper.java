@@ -1,4 +1,4 @@
-package com.arui.mall.core.cart.mapper;
+package com.arui.mall.core.order.mapper;
 
 import com.arui.mall.model.pojo.entity.OrderInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

@@ -18,5 +18,13 @@ public interface CartFeignClient {
      */
     @GetMapping("/cart/addCart/{skuId}/{skuNum}")
     public R addCart(@PathVariable Long skuId, @PathVariable Integer skuNum);
+
+    /**
+     * 展示购物车列表, 未登录的，如果再购物车列表登录，需要合并，userId和tempId
+     * @param
+     * @return
+     */
+    @GetMapping("getCartList")
+    public R getCartList();
 }
 

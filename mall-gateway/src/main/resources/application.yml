@@ -26,7 +26,7 @@ spring:
         - id: mall-index
           uri: lb://mall-web
           predicates:
-            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com, cart.gmall.com
+            - Host=www.gmall.com,search.gmall.com, item.gmall.com, passport.gmall.com, cart.gmall.com, order.gmall.com
 
         - id: mall-user
           uri: lb://mall-user

@@ -1,9 +1,12 @@
 package com.arui.mall.feign.client;
 
 import com.arui.mall.common.result.R;
+import com.arui.mall.model.pojo.entity.CartInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * @author ...
@@ -24,7 +27,15 @@ public interface CartFeignClient {
      * @param
      * @return
      */
-    @GetMapping("getCartList")
+    @GetMapping("/cart/getCartList")
     public R getCartList();
+
+    /**
+     *  勾选
+     * @param userId
+     * @return
+     */
+    @GetMapping("/cart/getCartListSelected/{userId}")
+    public List<CartInfo> getCartListSelected(@PathVariable Long userId);
 }
 

@@ -38,5 +38,10 @@ spring:
           predicates:
             - Path=/cart/**
 
+        - id: mall-order
+          uri: lb://mall-order
+          predicates:
+            - Path=/order/**
+
 server:
   port: 80

@@ -1,16 +1,19 @@
 package com.arui.mall.model.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.elasticsearch.annotations.Field;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -80,5 +83,6 @@ public class OrderInfo implements Serializable {
     @ApiModelProperty(value = "运单编号")
     private String logisticsNum;
 
-
+    @TableField(select = false)
+    private List<OrderDetail> orderDetailList;
 }

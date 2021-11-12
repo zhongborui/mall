@@ -103,5 +103,19 @@ public class CartInfoController {
         cartInfoService.remove(cartInfoQueryWrapper);
         return R.ok();
     }
+
+
+    /**
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("getCartListSelected/{userId}")
+    public List<CartInfo> getCartListSelected(@PathVariable Long userId){
+        QueryWrapper<CartInfo> cartInfoQueryWrapper = new QueryWrapper<>();
+        cartInfoQueryWrapper.eq("user_id", userId).eq("is_checked", 1);
+        List<CartInfo> list = cartInfoService.list(cartInfoQueryWrapper);
+        return list;
+    }
 }
 

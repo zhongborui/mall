@@ -25,8 +25,9 @@ public interface CartInfoService extends IService<CartInfo> {
 
     /**
      * 展示购物车列表
-     * @param finalUserId
+     * @param userId
+     * @param userTempId
      * @return
      */
-    List<CartInfo> getCartList(String finalUserId);
+    List<CartInfo> getCartList(String userId, String userTempId);
 }

@@ -63,14 +63,15 @@ public class CartInfoController {
     }
 
     /**
-     * 展示购物车列表
+     * 展示购物车列表, 未登录的，如果再购物车列表登录，需要合并，userId和tempId
      * @param request
      * @return
      */
     @GetMapping("getCartList")
     public R getCartList(HttpServletRequest request){
-        String finalUserId = getFinalUserId(request);
-        List<CartInfo> cartInfoList = cartInfoService.getCartList(finalUserId);
+        String userId = AuthContextHolder.getUserId(request);
+        String userTempId = AuthContextHolder.getUserTempId(request);
+        List<CartInfo> cartInfoList = cartInfoService.getCartList(userId, userTempId);
         return R.ok(cartInfoList);
     }
 }

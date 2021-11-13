@@ -118,8 +118,9 @@ public class OrderInfoController {
 
         // 以上没有问题，删除流水号
         orderInfoService.deleteTradNo(userId);
-        // 保存订单到数据库
-        return R.ok();
+        // 保存订单到数据库， 返回订单id
+        Long orderId = orderInfoService.saveOrderDetail(orderInfo, Long.parseLong(userId));
+        return R.ok(orderId);
     }
 }
 

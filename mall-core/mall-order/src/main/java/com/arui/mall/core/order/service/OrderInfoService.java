@@ -36,4 +36,12 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @param userId
      */
     void deleteTradNo(String userId);
+
+    /**
+     * 保存订单到数据库
+     * @param orderInfo
+     * @param userId
+     * @return
+     */
+    Long saveOrderDetail(OrderInfo orderInfo, Long userId);
 }

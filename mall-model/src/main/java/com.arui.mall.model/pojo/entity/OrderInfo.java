@@ -83,6 +83,6 @@ public class OrderInfo implements Serializable {
     @ApiModelProperty(value = "运单编号")
     private String logisticsNum;
 
-    @TableField(select = false)
+    @TableField(exist = false)
     private List<OrderDetail> orderDetailList;
 }

@@ -3,21 +3,20 @@ package com.arui.mall.core.order.service.impl;
 import com.arui.mall.common.util.HttpClientUtil;
 import com.arui.mall.core.order.config.MyThreadExecutor;
 import com.arui.mall.core.order.mapper.OrderInfoMapper;
+import com.arui.mall.core.order.service.OrderDetailService;
 import com.arui.mall.core.order.service.OrderInfoService;
 import com.arui.mall.feign.client.ProductFeignClient;
+import com.arui.mall.model.enums.OrderStatus;
+import com.arui.mall.model.enums.ProcessStatus;
 import com.arui.mall.model.pojo.entity.OrderDetail;
 import com.arui.mall.model.pojo.entity.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.utils.HttpClientUtils;
-import org.apache.http.impl.client.HttpClients;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -36,6 +35,9 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     @Resource
     private ProductFeignClient productFeignClient;
+
+    @Resource
+    private OrderDetailService orderDetailService;
 
     /**
      * 幂等性，防止无刷新重复提交表单
@@ -102,5 +104,44 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 定义key
         String tradeNoKey = "user:"+userId+":tradeNo";
         redisTemplate.delete(tradeNoKey);
+    }
+
+    /**
+     * 保存订单到数据库
+     * @param orderInfo
+     * @return
+     */
+    @Override
+    public Long saveOrderDetail(OrderInfo orderInfo, Long userId) {
+        List<OrderDetail> orderDetailList = orderInfo.getOrderDetailList();
+
+        //设置一些页面没有传递过来的值
+        orderInfo.setOrderStatus(OrderStatus.UNPAID.name());
+        orderInfo.setUserId(userId);
+        String outTradeNo = "ARUI" + System.currentTimeMillis() + "" + new Random().nextInt(1000);
+        orderInfo.setOutTradeNo(outTradeNo);
+        orderInfo.setTradeBody("购物商品信息");
+        orderInfo.setCreateTime(new Date());
+        //设置过期时间，默认一天
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,1);
+        orderInfo.setExpireTime(calendar.getTime());
+        // 订单的进程状态 ，枚举类里包含了订单的状态
+        orderInfo.setProcessStatus(ProcessStatus.UNPAID.name());
+        //设置订单总价，这里默认0.01
+        orderInfo.setTotalMoney(new BigDecimal(0.01));
+        baseMapper.insert(orderInfo);
+
+
+        // 保存orderDetail表
+        for (OrderDetail orderDetail : orderDetailList) {
+            orderDetail.setOrderId(orderInfo.getId());
+        }
+        orderDetailService.saveBatch(orderDetailList);
+
+        // todo 订单编号因该放在消息队列里面， 订单过期自动取消，mq的延迟队列
+
+        // 返回订单编号
+        return orderInfo.getId();
     }
 }

@@ -2,17 +2,16 @@ package com.arui.mall.core.order.controller;
 
 
 import com.arui.mall.common.result.R;
+import com.arui.mall.core.order.service.OrderInfoService;
 import com.arui.mall.feign.client.CartFeignClient;
 import com.arui.mall.feign.client.ProductFeignClient;
 import com.arui.mall.feign.client.UserFeignClient;
 import com.arui.mall.model.pojo.entity.*;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +37,9 @@ public class OrderInfoController {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private OrderInfoService orderInfoService;
 
     /**
      * 获取订单确认页面数据
@@ -93,11 +95,32 @@ public class OrderInfoController {
         return R.ok(resMap);
     }
 
+    /**
+     * 保存订单信息
+     * @param request
+     * @return
+     */
     @PostMapping("submitOrder")
-    public R submitOrder(HttpServletRequest request){
+    public R submitOrder(@RequestBody OrderInfo orderInfo, HttpServletRequest request){
+        String userId = request.getHeader("userId");
         String tradeNo = request.getParameter("tradeNo");
+        // 幂等性，防止无刷新重复提交表单
+        boolean flag = orderInfoService.checkTradNo(userId, tradeNo);
+        if (!flag){
+            // 不通过检验
+            return R.error().message("不能无刷新提交表单");
+        }
+        // 校验价格和库存, 返回提示列表
+        List<String> warningList = orderInfoService.checkPriceAndStock(orderInfo, userId);
+        if (!CollectionUtils.isEmpty(warningList)){
+            return R.error().message(StringUtils.join(warningList, ","));
+        }
 
-        return R.ok();
+        // 以上没有问题，删除流水号
+        orderInfoService.deleteTradNo(userId);
+        // 保存订单到数据库， 返回订单id
+        Long orderId = orderInfoService.saveOrderDetail(orderInfo, Long.parseLong(userId));
+        return R.ok(orderId);
     }
 }
 

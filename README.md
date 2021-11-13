@@ -70,6 +70,7 @@ mall
 | FastDFS                           | 文件系统               | https://github.com/happyfish100/fastdfs              |
 | Redisson 3.11.2                   | 分布式锁               | https://github.com/redisson/redisson                 |
 | Spring Data ElasticSearch         | 搜索引擎               | https://spring.io/projects/spring-data-elasticsearch |
+| Spring AMQP                       | mq                     | https://spring.io/projects/spring-amqp               |
 
 
 
@@ -93,4 +94,4 @@ mall
 | 商品上架、下架、热度排名（es）                 | ✔        |
 | 商品搜索（es）                                 | ✔        |
 | 单点登录                                       | ✔        |
-
+| 购物车                                         | ✔        |

@@ -1,6 +1,7 @@
 package com.arui.mall.core.order.service.impl;
 
 import com.arui.mall.common.util.HttpClientUtil;
+import com.arui.mall.core.order.config.MyThreadExecutor;
 import com.arui.mall.core.order.mapper.OrderInfoMapper;
 import com.arui.mall.core.order.service.OrderInfoService;
 import com.arui.mall.feign.client.ProductFeignClient;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * <p>
@@ -59,23 +61,35 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     public List<String> checkPriceAndStock(OrderInfo orderInfo, String userId) {
         List<OrderDetail> orderDetailList = orderInfo.getOrderDetailList();
         List<String> warningList = new ArrayList<>();
+        // 异步编排集合
+        ArrayList<CompletableFuture<Void>> completableFutureArrayList = new ArrayList<>();
         for (OrderDetail orderDetail : orderDetailList) {
             Long skuId = orderDetail.getSkuId();
-            // 远程调用价格接口
-            BigDecimal skuPrice = productFeignClient.getSkuPrice(skuId);
-            int i = skuPrice.compareTo(orderDetail.getOrderPrice());
-            if (i != 0){
-                // 说明价格不相等,需要修改价格并提示
-                warningList.add(orderDetail.getSkuName() + "价格有变化");
-            }
-            // 远程调用库存接口 http://localhost:8100/hasStock?skuId=28&num=1000
-            String hasStorage = HttpClientUtil.doGet("http://localhost:8100/hasStock?skuId=" + skuId + "&num=" + orderDetail.getSkuNum());
-            if (!hasStorage.equals("1")){
-                // 没有库存了
-                warningList.add(orderDetail.getSkuName() + "库存不足");
-            }
-        }
 
+            CompletableFuture<Void> skuPriceCompletableFuture = CompletableFuture.runAsync(() -> {
+                // 远程调用价格接口
+                BigDecimal skuPrice = productFeignClient.getSkuPrice(skuId);
+                int i = skuPrice.compareTo(orderDetail.getOrderPrice());
+                if (i != 0) {
+                    // 说明价格不相等,需要修改价格并提示
+                    warningList.add(orderDetail.getSkuName() + "价格有变化");
+                }
+            }, MyThreadExecutor.getInstance());
+            completableFutureArrayList.add(skuPriceCompletableFuture);
+
+            CompletableFuture<Void> hasStorageCompletableFuture = CompletableFuture.runAsync(() -> {
+                // 远程调用库存接口 http://localhost:8100/hasStock?skuId=28&num=1000
+                String hasStorage = HttpClientUtil.doGet("http://localhost:8100/hasStock?skuId=" + skuId + "&num=" + orderDetail.getSkuNum());
+                if (!hasStorage.equals("1")) {
+                    // 没有库存了
+                    warningList.add(orderDetail.getSkuName() + "库存不足");
+                }
+            }, MyThreadExecutor.getInstance());
+            completableFutureArrayList.add(hasStorageCompletableFuture);
+        }
+        // 先搞一CompletableFuture类型数组
+        CompletableFuture[] completableFutureArray = new CompletableFuture[completableFutureArrayList.size()];
+        CompletableFuture.allOf(completableFutureArrayList.toArray(completableFutureArray)).join();
         return warningList;
     }
 

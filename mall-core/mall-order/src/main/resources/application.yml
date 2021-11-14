@@ -18,7 +18,7 @@ spring:
     host: vm.com
     port: 6389
   rabbitmq:
-    virtual-host: vm.com
+    host: vm.com
     port: 5672
     username: guest
     password: guest
@@ -29,3 +29,7 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+cancel:
+  order:
+    delay: 10000 # 10s

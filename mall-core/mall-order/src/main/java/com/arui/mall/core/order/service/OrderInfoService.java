@@ -1,5 +1,7 @@
 package com.arui.mall.core.order.service;
 
+import com.arui.mall.model.enums.OrderStatus;
+import com.arui.mall.model.enums.ProcessStatus;
 import com.arui.mall.model.pojo.entity.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -44,4 +46,18 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @return
      */
     Long saveOrderDetail(OrderInfo orderInfo, Long userId);
+
+    /**
+     * 根据订单号查看订单的状态，如果还是未支付，则将订单关闭
+     * @param id
+     * @return
+     */
+    OrderInfo checkOrderStatus(Long id);
+
+    /**
+     * 关闭订单
+     * @param id
+     * @param processStatus
+     */
+    void updateOrderStatus(Long id, ProcessStatus processStatus);
 }

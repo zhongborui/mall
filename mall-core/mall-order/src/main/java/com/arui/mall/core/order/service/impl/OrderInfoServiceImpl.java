@@ -1,6 +1,7 @@
 package com.arui.mall.core.order.service.impl;
 
 import com.arui.mall.common.util.HttpClientUtil;
+import com.arui.mall.core.constant.MqConst;
 import com.arui.mall.core.order.config.MyThreadExecutor;
 import com.arui.mall.core.order.mapper.OrderInfoMapper;
 import com.arui.mall.core.order.service.OrderDetailService;
@@ -11,6 +12,8 @@ import com.arui.mall.model.enums.ProcessStatus;
 import com.arui.mall.model.pojo.entity.OrderDetail;
 import com.arui.mall.model.pojo.entity.OrderInfo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,12 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     @Resource
     private OrderDetailService orderDetailService;
+
+    @Resource
+    private RabbitTemplate rabbitTemplate;
+
+    @Value("${cancel.order.delay}")
+    private Integer cancelOrderDelay;
 
     /**
      * 幂等性，防止无刷新重复提交表单
@@ -139,9 +148,43 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
         orderDetailService.saveBatch(orderDetailList);
 
-        // todo 订单编号因该放在消息队列里面， 订单过期自动取消，mq的延迟队列
+        //  订单编号因该放在消息队列里面， 订单过期自动取消，mq的延迟队列
+        rabbitTemplate.convertAndSend(MqConst.CANCEL_ORDER_EXCHANGE,
+                MqConst.CANCEL_ORDER_ROUTE_KEY,
+                orderInfo.getId(),
+                correlationData -> {
+            // 设置延迟时间10s
+                    correlationData.getMessageProperties().setDelay(cancelOrderDelay);
+                    return correlationData;
+                });
 
         // 返回订单编号
         return orderInfo.getId();
+    }
+
+    /**
+     * 根据订单号查看订单的状态，如果还是未支付，则将订单关闭
+     * @param id
+     * @return
+     */
+    @Override
+    public OrderInfo checkOrderStatus(Long id) {
+
+        OrderInfo orderInfo = baseMapper.selectById(id);
+        return orderInfo;
+    }
+
+    /**
+     * 关闭订单
+     * @param id
+     * @param processStatus
+     */
+    @Override
+    public void updateOrderStatus(Long id, ProcessStatus processStatus) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setId(id);
+        orderInfo.setOrderStatus(processStatus.getOrderStatus().name());
+        orderInfo.setProcessStatus(processStatus.name());
+        baseMapper.updateById(orderInfo);
     }
 }

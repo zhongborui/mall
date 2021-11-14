@@ -2,9 +2,11 @@ package com.arui.mall.product.controller.admin;
 
 
 import com.arui.mall.common.result.R;
+import com.arui.mall.core.constant.MqConst;
 import com.arui.mall.feign.client.SearchFeignClient;
 import com.arui.mall.model.pojo.entity.SkuInfo;
 import com.arui.mall.model.pojo.vo.SkuInfoVO;
+import com.arui.mall.product.callback.MyCallback;
 import com.arui.mall.product.service.SkuInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,8 +14,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -34,6 +38,9 @@ public class AdminSkuController {
 
     @Resource
     private SearchFeignClient searchFeignClient;
+
+    @Resource
+    private RabbitTemplate rabbitTemplate;
 
     /**
      *     //http://127.0.0.1/product/saveSkuInfo
@@ -68,6 +75,21 @@ public class AdminSkuController {
         return R.ok(page);
     }
 
+
+    @Resource
+    private MyCallback myCallBack;
+    @PostConstruct
+    public void init(){
+        // 开启确认机制
+        rabbitTemplate.setConfirmCallback(myCallBack);
+
+        // 开启交换机没有发送给到队列，强制回退消息给生产者，默认是false
+        rabbitTemplate.setMandatory(true);
+        // 回退机制 回调
+        rabbitTemplate.setReturnCallback(myCallBack);
+    }
+
+
     /**
      * //http://127.0.0.1/product/onSale/40
      * @param skuId
@@ -80,7 +102,11 @@ public class AdminSkuController {
         skuInfo.setId(skuId);
         skuInfo.setIsSale(1);
         skuInfoService.updateById(skuInfo);
-        searchFeignClient.onSale(skuId);
+//        searchFeignClient.onSale(skuId);
+        // 优化，将skuId放在mq
+        rabbitTemplate.convertAndSend(MqConst.ON_OFF_SALE_EXCHANGE,
+                MqConst.ON_SALE_ROUTING_KEY,
+                skuId);
         return R.ok();
     }
 
@@ -91,7 +117,10 @@ public class AdminSkuController {
         skuInfo.setId(skuId);
         skuInfo.setIsSale(0);
         skuInfoService.updateById(skuInfo);
-        searchFeignClient.offSale(skuId);
+//        searchFeignClient.offSale(skuId);
+        rabbitTemplate.convertAndSend(MqConst.ON_OFF_SALE_EXCHANGE,
+                MqConst.OFF_SALE_ROUTING_KEY,
+                skuId);
         return R.ok();
     }
 }

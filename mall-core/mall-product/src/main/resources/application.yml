@@ -13,10 +13,10 @@ spring:
       discovery:
         server-addr: vm.com:8848
   rabbitmq:
-    virtual-host: vm.com
     port: 5672
     username: guest
     password: guest
+    host: vm.com
   redis:
     host: vm.com
     port: 6389

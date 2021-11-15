@@ -32,4 +32,14 @@ public class WebPayController {
         model.addAttribute("orderInfo", orderInfo);
         return "payment/pay";
     }
+
+    /**
+     * 支付成功页面
+     * @return
+     */
+    @GetMapping("alipay/success.html")
+    public String success(){
+        return "payment/success";
+    }
+
 }

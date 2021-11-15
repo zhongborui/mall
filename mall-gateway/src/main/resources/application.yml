@@ -43,5 +43,10 @@ spring:
           predicates:
             - Path=/order/**
 
+        - id: mall-payment
+          uri: lb://mall-payment
+          predicates:
+            - Path=/payment/**
+
 server:
   port: 80

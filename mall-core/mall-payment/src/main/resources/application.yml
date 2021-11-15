@@ -1,0 +1,45 @@
+server:
+  port: 8007
+
+spring:
+  application:
+    name: mall-payment
+  cloud:
+    nacos:
+      discovery:
+        server-addr: vm.com:8848
+  rabbitmq:
+    host: vm.com
+    port: 5672
+    username: guest
+    password: guest
+  redis:
+    host: vm.com
+    port: 6389
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/mall_order?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+alipay_url: ENC(cV6EYXEusfPyjCzQRdq9ssSP/X8NQH8Rzlp3dleECPh/tkA6ROis+Kl/dxcpo7UGYg)
+app_id: ENC(bQg/8S2fsNhkS188DMSpNpY7jNTjvGS5Qs54/OTZP3Rt4=)
+app_private_key: ENC(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)
+alipay_public_key: ENC(vxPnxZxeUdxsfTXpicsakuvZhRPX/Ji8xTT+cd6kRPkrj5GBfIYYyNjwrcMTIzjr/Ipx/rWmc+y6z/QWgY7wIjG3FO4VG3mHc22aZvZpfpSAPLaiLZ8jz/RyPsmQNAXxIBGBWWxXoNEVtAg22l3FbVVSqDHYQQmqbBo0F8BIVQje2HrT2yweqxuSmjhfPYla8Q2WWPw9vMcdtCKc9ZKHCTF1zRMe5CHQWMTgRbrRA6mbDxoSOV0CI65ck6Ar+24rbyiOVSfvKQCkcAi4Wp5ToaEUrEQnGwRVYWUqfB+cVEXUIoX/3iMWy4IKqY9QgMk9P5R3pABUK3iXE5XC0QlNcMWwjqy2/tKHhUZz1k+8B0isEmyrboYb5dAS551uw8FGf+xcdXe/X+bqtVOrTT/xpgsBNb3d48Vm6Va3KUV2r0wE5anleJhALJLoEKhnFEJ3DiIojIoo9ZtcPXXC7ATDPvgVCI7jLfs1WprBFEOpQUBf/uXtakjtOEr68EiaXY+pV+FfDrEHKVniB3u89t75FuH+SBSxy7YEjx)
+# 同步回调地址 跳转到支付成功页面
+return_payment_url: ENC(YC/zianvDJV3itMfQCEx7lSFLFSRYWko5Ic6YP71OI1woF4F4XVmPhvmIDRz9MShOQ7yrz9ULT6ow=)
+# 异步回调地址
+notify_payment_url: ENC(gPNlDFnzpTQBJd/Y83USZFSWd6TrEX8vMxbDIXjOEcjJpLhDUVIUyXssqDOpsoAYCfJrRzQBu0umB7HBEnH2+Q37JfYYe7NlQn)
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator

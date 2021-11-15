@@ -32,4 +32,4 @@ mybatis-plus:
 
 cancel:
   order:
-    delay: 10000 # 10s
+    delay: 30000 # 30s

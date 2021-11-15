@@ -3,6 +3,7 @@ package com.arui.mall.core.order.service.impl;
 import com.arui.mall.common.util.HttpClientUtil;
 import com.arui.mall.core.constant.MqConst;
 import com.arui.mall.core.order.config.MyThreadExecutor;
+import com.arui.mall.core.order.mapper.OrderDetailMapper;
 import com.arui.mall.core.order.mapper.OrderInfoMapper;
 import com.arui.mall.core.order.service.OrderDetailService;
 import com.arui.mall.core.order.service.OrderInfoService;
@@ -11,6 +12,7 @@ import com.arui.mall.model.enums.OrderStatus;
 import com.arui.mall.model.enums.ProcessStatus;
 import com.arui.mall.model.pojo.entity.OrderDetail;
 import com.arui.mall.model.pojo.entity.OrderInfo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +49,9 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     @Value("${cancel.order.delay}")
     private Integer cancelOrderDelay;
+
+    @Resource
+    private OrderDetailMapper orderDetailMapper;
 
     /**
      * 幂等性，防止无刷新重复提交表单
@@ -186,5 +191,20 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         orderInfo.setOrderStatus(processStatus.getOrderStatus().name());
         orderInfo.setProcessStatus(processStatus.name());
         baseMapper.updateById(orderInfo);
+    }
+
+    /**
+     * 获取订单信息
+     * @param orderId
+     * @return
+     */
+    @Override
+    public OrderInfo getOrderInfo(Long orderId) {
+        OrderInfo orderInfo = baseMapper.selectById(orderId);
+        QueryWrapper<OrderDetail> wrapper = new QueryWrapper<>();
+        wrapper.eq("order_id", orderId);
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(wrapper);
+        orderInfo.setOrderDetailList(orderDetailList);
+        return orderInfo;
     }
 }

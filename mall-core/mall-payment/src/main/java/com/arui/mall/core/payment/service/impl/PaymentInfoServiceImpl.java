@@ -1,7 +1,7 @@
-package com.arui.mall.core.cart.service.impl;
+package com.arui.mall.core.payment.service.impl;
 
-import com.arui.mall.core.cart.mapper.PaymentInfoMapper;
-import com.arui.mall.core.cart.service.PaymentInfoService;
+import com.arui.mall.core.payment.mapper.PaymentInfoMapper;
+import com.arui.mall.core.payment.service.PaymentInfoService;
 import com.arui.mall.model.pojo.entity.PaymentInfo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

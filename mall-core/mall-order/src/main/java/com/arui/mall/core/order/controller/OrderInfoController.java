@@ -122,5 +122,15 @@ public class OrderInfoController {
         Long orderId = orderInfoService.saveOrderDetail(orderInfo, Long.parseLong(userId));
         return R.ok(orderId);
     }
+
+    /**
+     * 获取订单信息
+     * @param orderId
+     * @return
+     */
+    @GetMapping("getOrderInfo/{orderId}")
+    public OrderInfo getOrderInfo(@PathVariable Long orderId){
+        return orderInfoService.getOrderInfo(orderId);
+    }
 }
 

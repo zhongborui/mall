@@ -1,0 +1,31 @@
+server:
+  port: 8007
+
+spring:
+  application:
+    name: mall-payment
+  cloud:
+    nacos:
+      discovery:
+        server-addr: vm.com:8848
+  rabbitmq:
+    host: vm.com
+    port: 5672
+    username: guest
+    password: guest
+  redis:
+    host: vm.com
+    port: 6389
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/mall_order?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

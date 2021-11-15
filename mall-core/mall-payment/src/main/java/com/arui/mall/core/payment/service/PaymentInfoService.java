@@ -1,4 +1,4 @@
-package com.arui.mall.core.cart.service;
+package com.arui.mall.core.payment.service;
 
 import com.arui.mall.model.pojo.entity.PaymentInfo;
 import com.baomidou.mybatisplus.extension.service.IService;

@@ -27,7 +27,7 @@ public class RedisConstant {
     public static final int USERKEY_TIMEOUT = 60 * 60 * 24 * 7;
 
     //秒杀商品key
-    public static final String SECKILL_PRODUCT = "seckill:product";
+    public static final String SECKILL_PRODUCT = "seckill:product:";
     //预售秒杀商品用户id与商品信息对应key
     public static final String PREPARE_SECKILL_USERID_ORDER = "prepare:seckill:userId:order";
     //用户秒杀到的商品(非预售)

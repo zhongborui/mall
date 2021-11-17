@@ -18,6 +18,7 @@
         <module>mall-cart</module>
         <module>mall-order</module>
         <module>mall-payment</module>
+        <module>mall-seckill</module>
     </modules>
 
     <dependencies>

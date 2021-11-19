@@ -43,6 +43,8 @@ public class RedisConstant {
     public static final String CAN_SECKILL = "1";
     //不能秒杀
     public static final String CAN_NOT_SECKILL = "0";
+    // 商品状态位
+    public static final String SECKILL_STATE = "seckill:state:";
 
 
     //用户锁定时间 单位：秒

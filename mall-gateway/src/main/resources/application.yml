@@ -23,6 +23,11 @@ spring:
           predicates:
             - Path=/product/**
 
+        - id: mall-seckill
+          uri: lb://mall-seckill
+          predicates:
+            - Path=/seckill/**
+
         - id: mall-index
           uri: lb://mall-web
           predicates:

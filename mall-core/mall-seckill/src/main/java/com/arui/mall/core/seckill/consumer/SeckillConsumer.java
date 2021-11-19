@@ -61,7 +61,7 @@ public class SeckillConsumer {
         if (!CollectionUtils.isEmpty(seckillProductList)) {
             for (SeckillProduct seckillProduct : seckillProductList) {
                 Long skuId = seckillProduct.getSkuId();
-                redisTemplate.boundHashOps(RedisConstant.SECKILL_PRODUCT + skuId)
+                redisTemplate.boundHashOps(RedisConstant.SECKILL_PRODUCT)
                         .put(String.valueOf(skuId), seckillProduct);
 
 //                // 先判断缓存是否已经有该商品了

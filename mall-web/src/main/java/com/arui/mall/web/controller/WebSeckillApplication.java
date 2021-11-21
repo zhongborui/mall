@@ -46,4 +46,18 @@ public class WebSeckillApplication {
         model.addAttribute("item", seckillProductR.getData());
         return "seckill/detail";
     }
+
+    /**
+     * 点击抢购后，到排队页面或成功页面
+     * @param skuId
+     * @param seckillCode
+     * @param model
+     * @return
+     */
+    @GetMapping("seckill-queue.html")
+    public String seckillQueue(Long skuId, String seckillCode, Model model){
+        model.addAttribute("skuId", skuId);
+        model.addAttribute("seckillCode", seckillCode);
+        return "seckill/queue";
+    }
 }

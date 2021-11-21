@@ -13,4 +13,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SeckillProductService extends IService<SeckillProduct> {
 
+    /**
+     * 更新库存
+     * @param skuId
+     */
+    void updateSecKillStockCount(String skuId);
 }

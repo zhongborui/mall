@@ -7,7 +7,11 @@ import com.arui.mall.common.util.AuthContextHolder;
 import com.arui.mall.core.constant.MqConst;
 import com.arui.mall.core.constant.RedisConstant;
 import com.arui.mall.core.seckill.service.SeckillProductService;
+import com.arui.mall.feign.client.UserFeignClient;
+import com.arui.mall.model.pojo.entity.OrderDetail;
+import com.arui.mall.model.pojo.entity.PrepareSeckillOrder;
 import com.arui.mall.model.pojo.entity.SeckillProduct;
+import com.arui.mall.model.pojo.entity.UserAddress;
 import io.swagger.annotations.Api;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +51,9 @@ public class SecKillProductController {
 
     @Resource
     private SeckillProductService seckillProductService;
+
+    @Resource
+    private UserFeignClient userFeignClient;
 
     /**
      * 查询redis所有秒杀商品
@@ -143,5 +151,41 @@ public class SecKillProductController {
         String userId = AuthContextHolder.getUserId(request);
         return seckillProductService.hasQualified(skuId, userId);
     }
+
+    /**
+     * 秒杀确认消息
+     * @param request
+     * @return
+     */
+    @GetMapping("/seckillConfirm")
+    public R seckillConfirm(HttpServletRequest request){
+        String userId = AuthContextHolder.getUserId(request);
+        //秒杀到的预售商品订单信息
+        PrepareSeckillOrder prepareSeckillOrder = (PrepareSeckillOrder) redisTemplate.boundHashOps(RedisConstant.PREPARE_SECKILL_USERID_ORDER).get(userId);
+        if (prepareSeckillOrder ==null){
+            return R.error().message("非法操作");
+        }
+        //获取用户收货地址列表
+        List<UserAddress> userAddressList = userFeignClient.getUserAddressList(Long.parseLong(userId));
+        //商品
+        SeckillProduct seckillProduct = prepareSeckillOrder.getSeckillProduct();
+        //秒杀实体类
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setSkuId(seckillProduct.getSkuId());
+        orderDetail.setSkuName(seckillProduct.getSkuName());
+        orderDetail.setImgUrl(seckillProduct.getSkuDefaultImg());
+        orderDetail.setSkuNum(prepareSeckillOrder.getBuyNum()+"");
+        orderDetail.setOrderPrice(seckillProduct.getCostPrice());
+        List<OrderDetail> orderDetailList = new ArrayList<>();
+        orderDetailList.add(orderDetail);
+
+        //把这些数据封装到一个map中
+        Map<String, Object> result = new HashMap<>();
+        result.put("userAddressList",userAddressList);
+        result.put("orderDetailList",orderDetailList);
+        result.put("totalMoney",seckillProduct.getCostPrice());
+        return R.ok(result);
+    }
+
 }
 

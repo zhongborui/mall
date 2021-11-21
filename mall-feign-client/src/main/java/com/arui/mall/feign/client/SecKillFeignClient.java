@@ -28,4 +28,11 @@ public interface SecKillFeignClient {
      */
     @GetMapping("/seckill/querySecKillProduct/{skuId}")
     public R<SeckillProduct> querySecKillProduct(@PathVariable Long skuId);
+
+    /**
+     * 秒杀确认消息
+     * @return
+     */
+    @GetMapping("/seckill/seckillConfirm")
+    public R seckillConfirm();
 }

@@ -46,6 +46,8 @@ public class RedisConstant {
     // 商品状态位
     public static final String SECKILL_STATE = "seckill:state:";
 
+    public static final String PREPARE_SECKILL_SUCCESS = "PREPARE_SECKILL_SUCCESS";
+
 
     //用户锁定时间 单位：秒
     public static final int PREPARE_SECKILL_LOCK_TIME = 60 * 60 * 1;

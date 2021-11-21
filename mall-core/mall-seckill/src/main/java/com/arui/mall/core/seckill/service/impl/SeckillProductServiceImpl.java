@@ -1,12 +1,16 @@
 package com.arui.mall.core.seckill.service.impl;
 
+import com.arui.mall.common.result.R;
+import com.arui.mall.common.result.RetValCodeEnum;
 import com.arui.mall.core.constant.RedisConstant;
 import com.arui.mall.core.seckill.mapper.SeckillProductMapper;
 import com.arui.mall.core.seckill.service.SeckillProductService;
+import com.arui.mall.model.pojo.entity.PrepareSeckillOrder;
 import com.arui.mall.model.pojo.entity.SeckillProduct;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -44,5 +48,29 @@ public class SeckillProductServiceImpl extends ServiceImpl<SeckillProductMapper,
             //页面显示剩余库存
             redisTemplate.boundHashOps(RedisConstant.SECKILL_PRODUCT).put(skuId,seckillProduct);
         }
+    }
+
+    /**
+     * 判断是否有下单资格
+     * @param skuId
+     * @param userId
+     * @return
+     */
+    @Override
+    public R hasQualified(Long skuId, String userId) {
+        // redis预下单是否有
+
+        //如果预下单中有
+        PrepareSeckillOrder prepareSeckillOrder = (PrepareSeckillOrder) redisTemplate.boundHashOps(RedisConstant.PREPARE_SECKILL_USERID_ORDER).get(userId);
+        if (prepareSeckillOrder!=null){
+            return R.data(prepareSeckillOrder, RetValCodeEnum.PREPARE_SECKILL_SUCCESS);
+        }
+        //判断是否购买了重复商品
+        String orderId = (String) redisTemplate.boundHashOps(RedisConstant.BOUGHT_SECKILL_USER_ORDER).get(userId);
+        if (!StringUtils.isEmpty(orderId)){
+            return R.data(orderId, RetValCodeEnum.SECKILL_ORDER_SUCCESS);
+        }
+        //其他情况就是排队中
+        return R.data(null, RetValCodeEnum.SECKILL_RUN);
     }
 }

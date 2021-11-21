@@ -3,8 +3,10 @@ package com.arui.mall.core.seckill.controller;
 
 import com.arui.mall.common.result.R;
 import com.arui.mall.common.result.RetValCodeEnum;
+import com.arui.mall.common.util.AuthContextHolder;
 import com.arui.mall.core.constant.MqConst;
 import com.arui.mall.core.constant.RedisConstant;
+import com.arui.mall.core.seckill.service.SeckillProductService;
 import com.arui.mall.model.pojo.entity.SeckillProduct;
 import io.swagger.annotations.Api;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -41,6 +43,9 @@ public class SecKillProductController {
 
     @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private SeckillProductService seckillProductService;
 
     /**
      * 查询redis所有秒杀商品
@@ -126,5 +131,17 @@ public class SecKillProductController {
         return R.ok();
     }
 
+    /**
+     * http://api.gmall.com/seckill/hasQualified/24
+     * 判断订单是否有下单资格
+     * @param skuId
+     * @param request
+     * @return
+     */
+    @GetMapping("hasQualified/{skuId}")
+    public R hasQualified(@PathVariable Long skuId, HttpServletRequest request){
+        String userId = AuthContextHolder.getUserId(request);
+        return seckillProductService.hasQualified(skuId, userId);
+    }
 }
 

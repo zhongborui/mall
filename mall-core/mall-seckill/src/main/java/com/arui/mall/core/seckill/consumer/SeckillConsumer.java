@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ...
@@ -111,14 +112,14 @@ public class SeckillConsumer {
             return;
         }
 
-        Boolean flag = redisTemplate.boundHashOps(RedisConstant.PREPARE_SECKILL_USERID_ORDER + userId).putIfAbsent(skuId, secKillProduct);
+        Boolean flag = redisTemplate.boundValueOps(RedisConstant.PREPARE_SECKILL_USERID_ORDER+userId).setIfAbsent(skuId);
         if (!flag){
             // 之前下过该订单
             return;
         }
 
         // 校验库存，如果有库存，需要 -1
-        String hasStock = (String) redisTemplate.boundListOps(RedisConstant.SECKILL_STOCK_PREFIX + skuId).rightPop();
+        Integer hasStock = (Integer) redisTemplate.boundListOps(RedisConstant.SECKILL_STOCK_PREFIX + skuId).rightPop();
         if (hasStock == null){
             // 没有库存,通知其他节点更改状态位
             redisTemplate.convertAndSend(RedisConstant.PREPARE_PUB_SUB_SECKILL, skuId + ":" + RedisConstant.CAN_NOT_SECKILL);
